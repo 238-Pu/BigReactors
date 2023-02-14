@@ -1,9 +1,5 @@
 package erogenousbeef.bigreactors.client.gui;
 
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.inventory.Container;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.ResourceLocation;
 import erogenousbeef.bigreactors.client.ClientProxy;
 import erogenousbeef.bigreactors.common.BigReactors;
 import erogenousbeef.bigreactors.common.multiblock.MultiblockReactor;
@@ -15,14 +11,16 @@ import erogenousbeef.bigreactors.gui.controls.BeefGuiFuelMixBar;
 import erogenousbeef.bigreactors.gui.controls.BeefGuiHeatBar;
 import erogenousbeef.bigreactors.gui.controls.BeefGuiIcon;
 import erogenousbeef.bigreactors.gui.controls.BeefGuiLabel;
-import erogenousbeef.bigreactors.gui.controls.BeefGuiPowerBar;
 import erogenousbeef.bigreactors.gui.controls.GuiIconButton;
 import erogenousbeef.bigreactors.net.CommonPacketHandler;
 import erogenousbeef.bigreactors.net.message.MachineCommandActivateMessage;
 import erogenousbeef.bigreactors.net.message.multiblock.ReactorChangeWasteEjectionMessage;
 import erogenousbeef.bigreactors.net.message.multiblock.ReactorCommandEjectMessage;
 import erogenousbeef.bigreactors.utils.StaticUtils;
-import erogenousbeef.core.common.CoordTriplet;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.inventory.Container;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.ResourceLocation;
 
 public class GuiReactorStatus extends BeefGuiBase {
 
@@ -48,7 +46,7 @@ public class GuiReactorStatus extends BeefGuiBase {
 	private BeefGuiIcon reactivityIcon;
 	private BeefGuiLabel reactivityString;
 
-	private BeefGuiPowerBar powerBar;
+	//private BeefGuiPowerBar powerBar;
 	private BeefGuiHeatBar coreHeatBar;
 	private BeefGuiHeatBar caseHeatBar;
 	private BeefGuiFuelMixBar fuelMixBar;
@@ -120,7 +118,7 @@ public class GuiReactorStatus extends BeefGuiBase {
 		topY += statusString.getHeight() + 4;
 		
 		
-		powerBar = new BeefGuiPowerBar(this, guiLeft + 152, guiTop + 22, this.reactor);
+		//powerBar = new BeefGuiPowerBar(this, guiLeft + 152, guiTop + 22, this.reactor);
 		coreHeatBar = new BeefGuiHeatBar(this, guiLeft + 130, guiTop + 22, EnumChatFormatting.AQUA + "Core Heat", new String[] { "Heat of the reactor's fuel.", "High heat raises fuel usage.", "", "Core heat is transferred to", "the casing. Transfer rate", "is based on the design of", "the reactor's interior."});
 		caseHeatBar = new BeefGuiHeatBar(this, guiLeft + 108, guiTop + 22, EnumChatFormatting.AQUA + "Casing Heat", new String[] { "Heat of the reactor's casing.", "High heat raises energy output", "and coolant conversion."});
 		fuelMixBar = new BeefGuiFuelMixBar(this, guiLeft + 86, guiTop + 22, this.reactor);
@@ -141,7 +139,7 @@ public class GuiReactorStatus extends BeefGuiBase {
 		registerControl(fuelConsumedString);
 		registerControl(reactivityIcon);
 		registerControl(reactivityString);
-		registerControl(powerBar);
+		//registerControl(powerBar);
 		registerControl(coreHeatBar);
 		registerControl(caseHeatBar);
 		registerControl(fuelMixBar);
@@ -172,12 +170,12 @@ public class GuiReactorStatus extends BeefGuiBase {
 		}
 		
 		outputString.setLabelText(getFormattedOutputString());
-		if(reactor.isPassivelyCooled()) {
-			outputString.setLabelTooltip(String.format("%.2f flux per tick", reactor.getEnergyGeneratedLastTick()));
-		}
-		else {
-			outputString.setLabelTooltip(String.format("%.0f millibuckets per tick", reactor.getEnergyGeneratedLastTick()));
-		}
+		//if(reactor.isPassivelyCooled()) {
+		//	outputString.setLabelTooltip(String.format("%.2f flux per tick", reactor.getEnergyGeneratedLastTick()));
+		//}
+		//else {
+     	outputString.setLabelTooltip(String.format("%.0f millibuckets per tick", reactor.getEnergyGeneratedLastTick()));
+		//}
 
 		heatString.setLabelText(Integer.toString((int)reactor.getFuelHeat()) + " C");
 		coreHeatBar.setHeat(reactor.getFuelHeat());
@@ -228,7 +226,7 @@ public class GuiReactorStatus extends BeefGuiBase {
 			btnReactorOff.setIcon(ClientProxy.GuiIcons.getIcon(BeefGuiIconManager.OFF_ON));
 		}
 		
-		if(reactor.isPassivelyCooled()) {
+		/*if(reactor.isPassivelyCooled()) {
 			outputIcon.setIcon(ClientProxy.GuiIcons.getIcon("energyOutput"));
 			outputIcon.setTooltip(passivelyCooledTooltip);
 			
@@ -237,7 +235,7 @@ public class GuiReactorStatus extends BeefGuiBase {
 			hotFluidIcon.visible = false;
 			hotFluidBar.visible = false;
 		}
-		else {
+		else {*/
 			outputIcon.setIcon(ClientProxy.GuiIcons.getIcon("hotFluidOut"));
 			outputIcon.setTooltip(activelyCooledTooltip);
 			
@@ -245,7 +243,7 @@ public class GuiReactorStatus extends BeefGuiBase {
 			coolantBar.visible = true;
 			hotFluidIcon.visible = true;
 			hotFluidBar.visible = true;
-		}
+		//}
 
 		
 		switch(reactor.getWasteEjection()) {
@@ -263,13 +261,13 @@ public class GuiReactorStatus extends BeefGuiBase {
 		}
 	}
 	
-	private static final String[] passivelyCooledTooltip = new String[] {
+	/*private static final String[] passivelyCooledTooltip = new String[] {
 		EnumChatFormatting.AQUA + "Energy Output",
 		"",
 		"This reactor is passively cooled",
 		"and generates energy directly from",
 		"the heat of its core."
-	};
+	};*/
 	
 	private static final String[] activelyCooledTooltip = new String[] {
 		EnumChatFormatting.AQUA + "Hot Fluid Output",
@@ -282,12 +280,12 @@ public class GuiReactorStatus extends BeefGuiBase {
 	private String getFormattedOutputString() {
 		float number = reactor.getEnergyGeneratedLastTick(); // Also doubles as fluid vaporized last tick
 
-		if(reactor.isPassivelyCooled()) {
+		/*if(reactor.isPassivelyCooled()) {
 			return StaticUtils.Strings.formatRF(number) + "/t";
 		}
-		else {
+		else {*/
 			return StaticUtils.Strings.formatMillibuckets(number) + "/t";			
-		}
+		//}
 	}
 	
 	private String getFuelConsumptionTooltip(float fuelConsumption) {

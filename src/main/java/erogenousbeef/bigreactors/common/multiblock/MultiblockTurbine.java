@@ -1,24 +1,11 @@
 package erogenousbeef.bigreactors.common.multiblock;
 
-import io.netty.buffer.ByteBuf;
-
 import java.util.HashSet;
 import java.util.Set;
 
-import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTank;
-import net.minecraftforge.fluids.FluidTankInfo;
+import com.hbm.blocks.ModBlocks;
+import com.hbm.explosion.ExplosionLarge;
+
 import cofh.api.energy.IEnergyProvider;
 import cofh.lib.util.helpers.ItemHelper;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
@@ -28,7 +15,6 @@ import erogenousbeef.bigreactors.api.data.CoilPartData;
 import erogenousbeef.bigreactors.api.registry.TurbineCoil;
 import erogenousbeef.bigreactors.common.BRLog;
 import erogenousbeef.bigreactors.common.BigReactors;
-import erogenousbeef.bigreactors.common.block.BlockBRMetal;
 import erogenousbeef.bigreactors.common.interfaces.IMultipleFluidHandler;
 import erogenousbeef.bigreactors.common.multiblock.block.BlockTurbineRotorPart;
 import erogenousbeef.bigreactors.common.multiblock.helpers.FloatUpdateTracker;
@@ -48,6 +34,21 @@ import erogenousbeef.core.multiblock.IMultiblockPart;
 import erogenousbeef.core.multiblock.MultiblockControllerBase;
 import erogenousbeef.core.multiblock.MultiblockValidationException;
 import erogenousbeef.core.multiblock.rectangular.RectangularMultiblockControllerBase;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTank;
+import net.minecraftforge.fluids.FluidTankInfo;
 
 public class MultiblockTurbine extends RectangularMultiblockControllerBase implements IEnergyProvider, IMultipleFluidHandler, ISlotlessUpdater, IActivateable {
 
@@ -571,6 +572,21 @@ public class MultiblockTurbine extends RectangularMultiblockControllerBase imple
 				}
 			}
 		}
+		if(getRotorSpeed()>=(getMaxRotorSpeed()*1.1f))
+		{
+			for(TileEntityTurbineRotorPart part : attachedRotorShafts) {
+				attachedRotorShafts.remove(part);
+				ExplosionLarge.explode(worldObj, part.xCoord, part.yCoord, part.zCoord, 20, true, true, true);
+				break;
+				//worldObj.markBlockForUpdate(part.xCoord, part.yCoord, part.zCoord);
+			}
+		}
+		//if (stack.getItem() != null && stack.getItem() == ModItems.pellet_antimatter && WeaponConfig.dropCell) {
+		//	if (!entityItem.worldObj.isRemote) {
+		//		ExplosionLarge.explodeFire(entityItem.worldObj, entityItem.posX, entityItem.posY,
+		//				entityItem.posZ, 100, true, true, true);
+		//	}
+		//}
 		
 		int energyAvailable = (int)getEnergyStored();
 		int energyRemaining = energyAvailable;
@@ -1006,8 +1022,9 @@ public class MultiblockTurbine extends RectangularMultiblockControllerBase imple
 		// Allow vanilla iron and gold blocks
 		if(block == Blocks.iron_block) { return TurbineCoil.getBlockData("blockIron"); }
 		if(block == Blocks.gold_block) { return TurbineCoil.getBlockData("blockGold"); }
+		if(block == ModBlocks.hadron_coil_schrabidium) { return TurbineCoil.getBlockData("coilSchrabidium"); }
 		
-		if(block == BigReactors.blockMetal && metadata == BlockBRMetal.METADATA_LUDICRITE) { return TurbineCoil.getBlockData("blockLudicrite"); }
+		//if(block == BigReactors.blockMetal && metadata == BlockBRMetal.METADATA_LUDICRITE) { return TurbineCoil.getBlockData("blockLudicrite"); }
 		
 		// Check the oredict to see if it's copper, or a funky kind of gold/iron block
 		String oreName = ItemHelper.oreProxy.getOreName(new ItemStack(block, 1, metadata));

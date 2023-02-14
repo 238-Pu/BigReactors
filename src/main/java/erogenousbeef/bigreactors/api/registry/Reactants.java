@@ -259,6 +259,12 @@ public class Reactants {
 		return isFuel(getReactantName(stack));
 	}
 
+	public static boolean isBreeder(ItemStack stack) {
+		if(stack == null) { return false; }
+		
+		return isBreeder(getReactantName(stack));
+	}
+	
 	/**
 	 * Returns the first registered reactant name for a given item stack,
 	 * based on its ore dictionary entry.
@@ -294,6 +300,28 @@ public class Reactants {
 		else {
 			ReactantData data = getReactant(name);
 			return data != null && data.isWaste();
+		}
+	}
+	
+	public static boolean isBreeder(String name) {
+		if(name == null) { return false; }
+		else {
+			ReactantData data = getReactant(name);
+			return data != null && data.isBreeder();
+		}
+	}
+	
+	public static boolean isBred(ItemStack stack) {
+		if(stack == null) { return false; }
+		
+		return isBred(getReactantName(stack));
+	}
+	
+	public static boolean isBred(String name) {
+		if(name == null) { return false; }
+		else {
+			ReactantData data = getReactant(name);
+			return data != null && data.isBred();
 		}
 	}
 	

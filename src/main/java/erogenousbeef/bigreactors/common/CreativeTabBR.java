@@ -12,6 +12,6 @@ public class CreativeTabBR extends CreativeTabs {
 
 	public Item getTabIconItem()
 	{
-		return Item.getItemFromBlock(BigReactors.blockYelloriteOre);
+		return Item.getItemFromBlock(BigReactors.blockYelloriumFuelRod);
 	}
 }

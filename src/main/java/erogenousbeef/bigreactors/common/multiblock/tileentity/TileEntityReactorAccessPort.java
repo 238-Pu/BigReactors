@@ -2,6 +2,8 @@ package erogenousbeef.bigreactors.common.multiblock.tileentity;
 
 import java.util.List;
 
+import com.hbm.items.ModItems;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -152,8 +154,8 @@ public class TileEntityReactorAccessPort extends TileEntityReactorPart implement
 		}
 
 		if(bestMapping == null) {
-			BRLog.warning("There are no mapped item types for reactant %s. Using cyanite instead.", reactantType);
-			bestMapping = StandardReactants.cyaniteMapping;
+			BRLog.warning("There are no mapped item types for reactant %s. Using uranium waste instead.", reactantType);
+			bestMapping = StandardReactants.uraniumWasteMapping;
 		}
 
 		int itemsToProduce = Math.min(bestMapping.getProductAmount(amount), getInventoryStackLimit());
@@ -168,8 +170,8 @@ public class TileEntityReactorAccessPort extends TileEntityReactorPart implement
 
 		ItemStack newItem = ItemHelper.getOre(bestMapping.getProduct());
 		if(newItem == null) {
-			BRLog.warning("Could not find item for oredict entry %s, using cyanite instead.", bestMapping.getSource());
-			newItem = BigReactors.ingotGeneric.getItemStackForType("ingotCyanite");
+			BRLog.warning("Could not find item for oredict entry %s, using uranium waste instead.", bestMapping.getSource());
+			newItem = new ItemStack(ModItems.waste_uranium, 1, 1);
 		}
 		else {
 			newItem = newItem.copy(); // Don't stomp the oredict
@@ -350,10 +352,10 @@ public class TileEntityReactorAccessPort extends TileEntityReactorPart implement
 		if(itemstack == null) { return true; }
 
 		if(slot == SLOT_INLET) {
-			return Reactants.isFuel(itemstack);
+			return (Reactants.isFuel(itemstack)||Reactants.isBreeder(itemstack));
 		}
 		else if(slot == SLOT_OUTLET) {
-			return Reactants.isWaste(itemstack);
+			return (Reactants.isWaste(itemstack)||Reactants.isBred(itemstack));
 		}
 		else {
 			return false;

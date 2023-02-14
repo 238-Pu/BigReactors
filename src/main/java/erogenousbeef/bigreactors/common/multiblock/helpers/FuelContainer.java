@@ -1,12 +1,14 @@
 package erogenousbeef.bigreactors.common.multiblock.helpers;
 
-import net.minecraft.nbt.NBTTagCompound;
+import com.hbm.hazard.HazardRegistry;
+
 import erogenousbeef.bigreactors.api.data.ReactorReaction;
 import erogenousbeef.bigreactors.api.registry.Reactants;
 import erogenousbeef.bigreactors.api.registry.ReactorConversions;
 import erogenousbeef.bigreactors.common.BRLog;
 import erogenousbeef.bigreactors.common.data.ReactantStack;
 import erogenousbeef.bigreactors.common.data.StandardReactants;
+import net.minecraft.nbt.NBTTagCompound;
 
 /**
  * Class to help with fuel/waste tracking in reactors.
@@ -33,6 +35,7 @@ public class FuelContainer extends ReactantContainer {
 	public int getWasteAmount() {
 		return getReactantAmount(WASTE);
 	}
+	
 	
 	@Override
 	public boolean isReactantValidForStack(int idx, String name) {
@@ -73,14 +76,14 @@ public class FuelContainer extends ReactantContainer {
 	
 	private int addWaste(int wasteAmt) {
 		if(this.getWasteType() == null) {
-			BRLog.warning("System is using addWaste(int) when there's no waste present, defaulting to cyanite");
-			return fill(WASTE, StandardReactants.cyanite, wasteAmt, true);
+			BRLog.warning("System is using addWaste(int) when there's no waste present, defaulting to uranium waste");
+			return fill(WASTE, StandardReactants.uraniumWaste, wasteAmt, true);
 		}
 		else {
 			return addToStack(WASTE, wasteAmt);
 		}
 	}
-	
+
 	public int dumpFuel() {
 		return dump(FUEL);
 	}
@@ -104,7 +107,7 @@ public class FuelContainer extends ReactantContainer {
 	public String getWasteType() {
 		return getReactantType(WASTE);
 	}
-	
+
 	public NBTTagCompound writeToNBT(NBTTagCompound destination) {
 		super.writeToNBT(destination);
 		
@@ -138,7 +141,6 @@ public class FuelContainer extends ReactantContainer {
 	
 	public void merge(FuelContainer other) {
 		radiationFuelUsage = Math.max(radiationFuelUsage, other.radiationFuelUsage);
-		
 		super.merge(other);
 	}
 	
@@ -172,7 +174,7 @@ public class FuelContainer extends ReactantContainer {
 
 				if(wasteType == null) {
 					BRLog.warning("Could not locate waste for reaction of fuel type " + fuelType + "; using cyanite");
-					wasteType = StandardReactants.cyanite;
+					wasteType = StandardReactants.mixPlutonium;
 				}
 				
 				this.addWaste(wasteType, fuelToConvert);
@@ -182,7 +184,7 @@ public class FuelContainer extends ReactantContainer {
 			BRLog.warning("Attempting to use %d fuel and there's no fuel in the tank", fuelToConvert);
 		}
 	}
-
+	
 	public float getFuelReactivity() {
 		String reactant = getFuelType();
 		ReactorReaction reaction = ReactorConversions.get(reactant);
@@ -193,5 +195,63 @@ public class FuelContainer extends ReactantContainer {
 		else {
 			return reaction.getReactivity();
 		}
+	}
+	
+	public float getFuelRadioactivity() {
+		String reactant = getFuelType();
+		if(reactant==StandardReactants.thorium)
+		{
+			return HazardRegistry.thf*(getFuelAmount()/(Reactants.standardSolidReactantAmount*6));
+		}
+		/*if(reactant==StandardReactants.natUranium)
+		{
+			return 0.5F*(getFuelAmount()/(Reactants.standardSolidReactantAmount*9));
+		}*/
+		if(reactant==StandardReactants.uranium)
+		{
+			return HazardRegistry.uf*(getFuelAmount()/(Reactants.standardSolidReactantAmount*6));
+		}
+		if(reactant==StandardReactants.MOX)
+		{
+			return HazardRegistry.mox*(getFuelAmount()/(Reactants.standardSolidReactantAmount*6));
+		}
+		if(reactant==StandardReactants.plutonium)
+		{
+			return HazardRegistry.puf*(getFuelAmount()/(Reactants.standardSolidReactantAmount*6));
+		}
+		if(reactant==StandardReactants.schrabidium)
+		{
+			return HazardRegistry.saf*(getFuelAmount()/(Reactants.standardSolidReactantAmount*6));
+		}		
+		return 0;		
+	}
+	
+	public float getWasteRadioactivity() {
+		String reactant = getFuelType();
+		if(reactant==StandardReactants.thoriumWaste)
+		{
+			return 20F*(getWasteAmount()/(Reactants.standardSolidReactantAmount*6));
+		}
+		/*if(reactant==StandardReactants.mixPlutonium)
+		{
+			return 40F*(getWasteAmount()/(Reactants.standardSolidReactantAmount*6));
+		}*/
+		if(reactant==StandardReactants.uraniumWaste)
+		{
+			return 40F*(getWasteAmount()/(Reactants.standardSolidReactantAmount*6));
+		}
+		if(reactant==StandardReactants.MOXWaste)
+		{
+			return 50F*(getWasteAmount()/(Reactants.standardSolidReactantAmount*6));
+		}
+		if(reactant==StandardReactants.plutoniumWaste)
+		{
+			return 55F*(getWasteAmount()/(Reactants.standardSolidReactantAmount*6));
+		}
+		if(reactant==StandardReactants.schrabidiumWaste)
+		{
+			return 60F*(getWasteAmount()/(Reactants.standardSolidReactantAmount*6));
+		}		
+		return 0;		
 	}
 }

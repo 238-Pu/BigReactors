@@ -2,6 +2,14 @@ package erogenousbeef.bigreactors.common.multiblock.block;
 
 import java.util.List;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import erogenousbeef.bigreactors.common.BigReactors;
+import erogenousbeef.bigreactors.common.multiblock.tileentity.TileEntityReactorGlass;
+import erogenousbeef.bigreactors.common.multiblock.tileentity.TileEntityTurbinePartGlass;
+import erogenousbeef.bigreactors.utils.StaticUtils;
+import erogenousbeef.core.multiblock.IMultiblockPart;
+import erogenousbeef.core.multiblock.MultiblockControllerBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -17,14 +25,6 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import erogenousbeef.bigreactors.common.BigReactors;
-import erogenousbeef.bigreactors.common.multiblock.tileentity.TileEntityReactorGlass;
-import erogenousbeef.bigreactors.common.multiblock.tileentity.TileEntityTurbinePartGlass;
-import erogenousbeef.bigreactors.utils.StaticUtils;
-import erogenousbeef.core.multiblock.IMultiblockPart;
-import erogenousbeef.core.multiblock.MultiblockControllerBase;
 
 public class BlockMultiblockGlass extends BlockContainer {
 
@@ -177,4 +177,13 @@ public class BlockMultiblockGlass extends BlockContainer {
     {
 		return false;
     }
+	
+    @SideOnly(Side.CLIENT)
+    public int getRenderBlockPass() {
+        return 1;
+    }
+    
+    /*public boolean renderAsNormalBlock() {
+        return false;
+    }*/
 }

@@ -1,14 +1,9 @@
 package erogenousbeef.bigreactors.common.multiblock.helpers;
 
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.IFluidBlock;
+import java.util.Random;
+
+import com.hbm.blocks.ModBlocks;
+
 import cofh.lib.util.helpers.ItemHelper;
 import erogenousbeef.bigreactors.api.IHeatEntity;
 import erogenousbeef.bigreactors.api.IRadiationModerator;
@@ -21,6 +16,15 @@ import erogenousbeef.bigreactors.common.multiblock.tileentity.TileEntityReactorC
 import erogenousbeef.bigreactors.common.multiblock.tileentity.TileEntityReactorFuelRod;
 import erogenousbeef.bigreactors.utils.StaticUtils;
 import erogenousbeef.core.common.CoordTriplet;
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.IFluidBlock;
 
 /**
  * Helper for reactor radiation game logic
@@ -29,15 +33,15 @@ import erogenousbeef.core.common.CoordTriplet;
 public class RadiationHelper {
 
 	// Game Balance Values
-	public static final float fuelPerRadiationUnit = 0.0007f; // fuel units used per fission event
+	public static final float fuelPerRadiationUnit = 0.00007f; // fuel units used per fission event
 	public static final float rfPerRadiationUnit = 10f; // RF generated per fission event
 	public static final float fissionEventsPerFuelUnit = 0.01f; // 1 fission event per 100 mB
 
 	public static final ReactorInteriorData airData = new ReactorInteriorData(0.1f, 0.25f, 1.1f, IHeatEntity.conductivityAir);
-	public static final ReactorInteriorData waterData = new ReactorInteriorData(0.33f, 0.5f, 1.33f, IHeatEntity.conductivityWater);
+	public static final ReactorInteriorData waterData = new ReactorInteriorData(0.33f, 0.5f, 1.7f, IHeatEntity.conductivityWater);
 
 	private float fertility;
-	
+	private Random rand = new Random();
 	public RadiationHelper() {
 		fertility = 1f;
 	}
@@ -68,12 +72,16 @@ public class RadiationHelper {
 		scaledRadIntensity = (float) Math.pow((scaledRadIntensity/numControlRods), fuelReactivity) * numControlRods;
 
 		// Apply control rod moderation of radiation to the quantity of produced radiation. 100% insertion = 100% reduction.
-		float controlRodModifier = (float)(100-controlRod.getControlRodInsertion()) / 100f;
+		float controlRodModifier = 0;
+		if(controlRod != null)
+		{
+			controlRodModifier = (float)(100-controlRod.getControlRodInsertion()) / 100f;
+		}
 		scaledRadIntensity = scaledRadIntensity * controlRodModifier;
 		rawRadIntensity = rawRadIntensity * controlRodModifier;
 
 		// Now nerf actual radiation production based on heat.
-		float effectiveRadIntensity = scaledRadIntensity * (1f + (float)(-0.95f*Math.exp(-10f*Math.exp(-0.0012f*fuelHeat))));
+		//float effectiveRadIntensity = scaledRadIntensity * (1f + (float)(-0.95f*Math.exp(-10f*Math.exp(-0.0012f*fuelHeat))));
 
 		// Radiation hardness starts at 20% and asymptotically approaches 100% as heat rises.
 		// This will make radiation harder and harder to capture.
@@ -81,31 +89,47 @@ public class RadiationHelper {
 
 		// Calculate based on propagation-to-self
 		float rawFuelUsage = (fuelPerRadiationUnit * rawRadIntensity / getFertilityModifier()) * BigReactors.fuelUsageMultiplier; // Not a typo. Fuel usage is thus penalized at high heats.
-		data.fuelRfChange = rfPerRadiationUnit * effectiveRadIntensity;
+		float rawBreederUsage = (fuelPerRadiationUnit * rawRadIntensity) * BigReactors.fuelUsageMultiplier; // Not a typo. Fuel usage is thus penalized at high heats.
+		data.fuelRfChange = rfPerRadiationUnit * scaledRadIntensity;
 		data.environmentRfChange = 0f;
 
 		// Propagate radiation to others
 		CoordTriplet originCoord = source.getWorldLocation();
 		CoordTriplet currentCoord = new CoordTriplet(0, 0, 0);
 		
-		effectiveRadIntensity *= 0.25f; // We're going to do this four times, no need to repeat
+		scaledRadIntensity *= 0.25f; // We're going to do this four times, no need to repeat
 		RadiationPacket radPacket = new RadiationPacket();
 
 		for(ForgeDirection dir : StaticUtils.CardinalDirections) {
 			radPacket.hardness = radHardness;
-			radPacket.intensity = effectiveRadIntensity;
+			radPacket.intensity = scaledRadIntensity;
 			int ttl = 4;
 			currentCoord.copy(originCoord);
 
 			while(ttl > 0 && radPacket.intensity > 0.0001f) {
 				ttl--;
 				currentCoord.translate(dir);
-				performIrradiation(world, data, radPacket, currentCoord.x, currentCoord.y, currentCoord.z);
+				//world.spawnParticle("townaura", currentCoord.x + rand.nextFloat(), currentCoord.y + rand.nextFloat(), currentCoord.z + rand.nextFloat(), 0.0D, 0.0D, 0.0D);
+				if(world.getBlock(currentCoord.x, currentCoord.y, currentCoord.z)==ModBlocks.block_beryllium)
+				{
+					//System.out.println("Radiation intensity: "+radPacket.intensity);
+					ForgeDirection dir2 = dir.getOpposite();
+					currentCoord.translate(dir2);
+					dir = dir2;
+				}
+				if(world.getBlock(currentCoord.x, currentCoord.y, currentCoord.z)==Blocks.diamond_block)
+				{
+					if(world.rand.nextInt(100000)==1)
+					{
+						world.setBlock(currentCoord.x, currentCoord.y, currentCoord.z, ModBlocks.block_graphite);
+					}
+				}
+				performIrradiation(world, dir, data, radPacket, currentCoord.x, currentCoord.y, currentCoord.z);
 			}
 		}
 
 		// Apply changes
-		fertility += data.fuelAbsorbedRadiation;
+		fertility += (data.fuelAbsorbedRadiation*controlRodModifier);
 		data.fuelAbsorbedRadiation = 0f;
 		
 		// Inform fuelContainer
@@ -123,7 +147,7 @@ public class RadiationHelper {
 		fertility = Math.max(0f, fertility - Math.max(0.1f, fertility/denominator));
 	}
 	
-	private void performIrradiation(World world, RadiationData data, RadiationPacket radiation, int x, int y, int z) {
+	private void performIrradiation(World world, ForgeDirection dir, RadiationData data, RadiationPacket radiation, int x, int y, int z) {
 		TileEntity te = world.getTileEntity(x, y, z);
 		if(te instanceof IRadiationModerator) {
 			((IRadiationModerator)te).moderateRadiation(data, radiation);
@@ -140,7 +164,7 @@ public class RadiationHelper {
 				}
 				else {
 					// Go by block
-					moderateByBlock(data, radiation, block, world.getBlockMetadata(x, y, z));
+					moderateByBlock(data, dir, radiation, block, world.getBlockMetadata(x, y, z));
 				}
 			}
 			else {
@@ -155,7 +179,7 @@ public class RadiationHelper {
 		applyModerationFactors(data, radiation, airData);
 	}
 	
-	private void moderateByBlock(RadiationData data, RadiationPacket radiation, Block block, int metadata) {
+	private void moderateByBlock(RadiationData data, ForgeDirection dir, RadiationPacket radiation, Block block, int metadata) {
 		ReactorInteriorData moderatorData = null;
 
 		if(block == Blocks.iron_block) {
@@ -170,6 +194,9 @@ public class RadiationHelper {
 		else if(block == Blocks.emerald_block) {
 			moderatorData = ReactorInterior.getBlockData("blockEmerald");
 		}
+		/*else if(block == Blocks.obsidian) {
+			dir = dir.getOpposite();
+		}*/
 		else {
 			// Check the ore dictionary.
 			moderatorData = ReactorInterior.getBlockData(ItemHelper.oreProxy.getOreName(new ItemStack(block, 1, metadata)));

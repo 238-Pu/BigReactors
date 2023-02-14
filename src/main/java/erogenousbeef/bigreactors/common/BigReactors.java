@@ -3,25 +3,13 @@ package erogenousbeef.bigreactors.common;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.EnumRarity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.oredict.ShapedOreRecipe;
-import net.minecraftforge.oredict.ShapelessOreRecipe;
+import com.hbm.blocks.ModBlocks;
+import com.hbm.items.ModItems;
+
 import cofh.core.util.oredict.OreDictionaryArbiter;
 import cofh.lib.util.helpers.ItemHelper;
 import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.registry.GameData;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -30,12 +18,8 @@ import erogenousbeef.bigreactors.api.registry.Reactants;
 import erogenousbeef.bigreactors.api.registry.ReactorConversions;
 import erogenousbeef.bigreactors.api.registry.ReactorInterior;
 import erogenousbeef.bigreactors.api.registry.TurbineCoil;
-import erogenousbeef.bigreactors.common.block.BlockBRDevice;
-import erogenousbeef.bigreactors.common.block.BlockBRGenericFluid;
 import erogenousbeef.bigreactors.common.block.BlockBRMetal;
-import erogenousbeef.bigreactors.common.block.BlockBROre;
 import erogenousbeef.bigreactors.common.data.StandardReactants;
-import erogenousbeef.bigreactors.common.item.ItemBRBucket;
 import erogenousbeef.bigreactors.common.item.ItemBeefDebugTool;
 import erogenousbeef.bigreactors.common.item.ItemBlockBigReactors;
 import erogenousbeef.bigreactors.common.item.ItemIngot;
@@ -55,8 +39,8 @@ import erogenousbeef.bigreactors.common.multiblock.tileentity.TileEntityReactorC
 import erogenousbeef.bigreactors.common.multiblock.tileentity.TileEntityReactorCoolantPort;
 import erogenousbeef.bigreactors.common.multiblock.tileentity.TileEntityReactorFuelRod;
 import erogenousbeef.bigreactors.common.multiblock.tileentity.TileEntityReactorGlass;
+//import erogenousbeef.bigreactors.common.multiblock.tileentity.TileEntityReactorIrradiatorRod;
 import erogenousbeef.bigreactors.common.multiblock.tileentity.TileEntityReactorPart;
-import erogenousbeef.bigreactors.common.multiblock.tileentity.TileEntityReactorPowerTap;
 import erogenousbeef.bigreactors.common.multiblock.tileentity.TileEntityReactorRedNetPort;
 import erogenousbeef.bigreactors.common.multiblock.tileentity.TileEntityReactorRedstonePort;
 import erogenousbeef.bigreactors.common.multiblock.tileentity.TileEntityTurbineComputerPort;
@@ -68,9 +52,22 @@ import erogenousbeef.bigreactors.common.multiblock.tileentity.TileEntityTurbineR
 import erogenousbeef.bigreactors.common.multiblock.tileentity.TileEntityTurbineRotorPart;
 import erogenousbeef.bigreactors.common.multiblock.tileentity.creative.TileEntityReactorCreativeCoolantPort;
 import erogenousbeef.bigreactors.common.multiblock.tileentity.creative.TileEntityTurbineCreativeSteamGenerator;
-import erogenousbeef.bigreactors.common.tileentity.TileEntityCyaniteReprocessor;
-import erogenousbeef.bigreactors.world.BRSimpleOreGenerator;
 import erogenousbeef.bigreactors.world.BRWorldGenerator;
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.EnumRarity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 
 public class BigReactors {
 
@@ -94,7 +91,7 @@ public class BigReactors {
 	
 	public static final int BLOCK_ID_PREFIX = 1750;
 	
-	public static Block blockYelloriteOre;
+	//public static Block blockYelloriteOre;
 	public static BlockBRMetal blockMetal;
 	public static Block blockYelloriumFuelRod;
 	public static BlockReactorPart blockReactorPart;
@@ -107,19 +104,21 @@ public class BigReactors {
 	public static BlockMBCreativePart blockMultiblockCreativePart;
 	
 	public static Block blockRadiothermalGen;
-	public static Block blockDevice;
+	//public static Block blockDevice;
 	
-	public static Block fluidYelloriumStill;
-	public static Block fluidCyaniteStill;
-	public static Block fluidFuelColumnStill;
+	//public static Block fluidYelloriumStill;
+	//public static Block fluidCyaniteStill;
+	//public static Block fluidFuelColumnStill;
+	//public static Block fluidRadioactiveWaterStill;
 	
 	// Buckets for bucketing reactor fluids
-	public static Item fluidYelloriumBucketItem;
-	public static Item fluidCyaniteBucketItem;
+//	public static Item fluidYelloriumBucketItem;
+	//public static Item fluidCyaniteBucketItem;
 	
-	public static Fluid fluidYellorium;
-	public static Fluid fluidCyanite;
+	//public static Fluid fluidYellorium;
+	//public static Fluid fluidCyanite;
 	public static Fluid fluidFuelColumn;
+	//public static Fluid fluidRadioactiveWater;
 	
 	public static Fluid fluidSteam;
 	public static boolean registeredOwnSteam;
@@ -132,7 +131,7 @@ public class BigReactors {
 
 	public static ItemBeefDebugTool itemDebugTool;
 	
-	public static BRSimpleOreGenerator yelloriteOreGeneration;
+	//public static BRSimpleOreGenerator yelloriteOreGeneration;
 	
 	public static boolean INITIALIZED = false;
 	public static boolean enableWorldGen = true;
@@ -154,7 +153,7 @@ public class BigReactors {
 	public static int maximumTurbineHeight = 32;
 	
 	public static float powerProductionMultiplier = 1.0f;
-	public static float fuelUsageMultiplier = 1.0f;
+	public static float fuelUsageMultiplier = 0.1f;
 	
 	public static float reactorPowerProductionMultiplier = 1.0f;
 	public static float turbinePowerProductionMultiplier = 1.0f;
@@ -259,24 +258,29 @@ public class BigReactors {
 			}
 			
 			// Use steel if the players are masochists and someone else has supplied steel.
-			String ironOrSteelIngot = "ingotIron";
-			if(useSteelForIron) {
-				ironOrSteelIngot = "ingotSteel";
-			}
+			//String ironOrSteelIngot = "ingotIron";
+			String ironOrSteelIngot = "ingotSteel";
+			//if(useSteelForIron) {
+				//ironOrSteelIngot = "ingotSteel";
+			//}
 			
 			String yelloriumIngot = "ingotYellorium";
 			String blutoniumIngot = "ingotBlutonium";
-			if(registerYelloriumAsUranium) {
-				yelloriumIngot = "ingotUranium";
-				blutoniumIngot = "ingotPlutonium";
-			}
+			String yelloriumDust = "dustYellorium";
+			String blutoniumDust = "dustBlutonium";
+			//if(registerYelloriumAsUranium) {
+			//	yelloriumIngot = "ingotUranium";
+			//	blutoniumIngot = "ingotPlutonium";
+			//	yelloriumDust = "dustUranium";
+			//	blutoniumDust = "dustPlutonium";
+			//}
 			
 			/*
 			 * Register Recipes
 			 */
 			// Recipe Registry
 			
-			// Yellorium
+			/* Yellorium
 			if (blockYelloriteOre != null)
 			{
 				ItemStack product;
@@ -294,22 +298,22 @@ public class BigReactors {
 				}
 
 				GameRegistry.addSmelting(blockYelloriteOre, product, 0.5f);
-			}
+			}*/
 			
 			
 			// Metal blocks
-			if(blockMetal != null && ingotGeneric != null) {
-				blockMetal.registerIngotRecipes(ingotGeneric);
-			}
+			//if(blockMetal != null && ingotGeneric != null) {
+			//	blockMetal.registerIngotRecipes(ingotGeneric);
+			//}
 			
-			if(blockMetal != null) {
-				// Ludicrite block. Because.
-				GameRegistry.addRecipe(new ShapedOreRecipe(blockMetal.getItemStackForMaterial("Ludicrite"), "BPB", "ENE", "BPB", 'N', Items.nether_star, 'P', Items.ender_pearl, 'E', Blocks.emerald_block, 'B', blutoniumIngot));
-				if(ItemHelper.getOre("blockEnderium") != null) {
-					// Ok, how about some ludicrous shit here. Enderium and blaze rods. Have fun, bucko.
-					GameRegistry.addRecipe(new ShapedOreRecipe(blockMetal.getItemStackForMaterial("Ludicrite"), "BRB", "E E", "BRB", 'B', blutoniumIngot, 'R', Items.blaze_rod, 'E', "blockEnderium"));
-				}
-			}
+			//if(blockMetal != null) {
+			//	// Ludicrite block. Because.
+			//	GameRegistry.addRecipe(new ShapedOreRecipe(blockMetal.getItemStackForMaterial("Ludicrite"), "BPB", "ENE", "BPB", 'N', Items.nether_star, 'P', Items.ender_pearl, 'E', Blocks.emerald_block, 'B', blutoniumIngot));
+			//	if(ItemHelper.getOre("blockEnderium") != null) {
+			//		// Ok, how about some ludicrous shit here. Enderium and blaze rods. Have fun, bucko.
+			//		GameRegistry.addRecipe(new ShapedOreRecipe(blockMetal.getItemStackForMaterial("Ludicrite"), "BRB", "E E", "BRB", 'B', blutoniumIngot, 'R', Items.blaze_rod, 'E', "blockEnderium"));
+			//	}
+			//}
 
 			if(ingotGeneric != null) {
 				// Map all dusts to ingots.
@@ -321,7 +325,7 @@ public class BigReactors {
 			}
 			
 			ItemStack ingotGraphite = OreDictionaryArbiter.getOres("ingotGraphite").get(0).copy();
-			ItemStack ingotCyanite = OreDictionaryArbiter.getOres("ingotCyanite").get(0).copy();
+			//ItemStack ingotCyanite = OreDictionaryArbiter.getOres("ingotCyanite").get(0).copy();
 			
 			if(registerCoalFurnaceRecipe) {
 				// Coal -> Graphite
@@ -341,31 +345,31 @@ public class BigReactors {
 				GameRegistry.addRecipe(new ShapedOreRecipe( ingotGraphite, "GCG", 'G', Blocks.gravel, 'C', new ItemStack(Items.coal, 1, 1)));
 			}
 			
-			if(enableCyaniteFromYelloriumRecipe) {
-				GameRegistry.addRecipe(new ShapelessOreRecipe(ingotCyanite, yelloriumIngot, Blocks.sand ));
-			}
+			//if(enableCyaniteFromYelloriumRecipe) {
+			//	GameRegistry.addRecipe(new ShapelessOreRecipe(ingotCyanite, yelloriumIngot, Blocks.sand ));
+			//}
 
 			// Basic Parts: Reactor Casing, Fuel Rods
 			if(blockYelloriumFuelRod != null) {
-				GameRegistry.addRecipe(new ShapedOreRecipe( new ItemStack(blockYelloriumFuelRod, 1), "ICI", "IUI", "ICI", 'I', ironOrSteelIngot, 'C', "ingotGraphite", 'U', yelloriumIngot));
+				GameRegistry.addRecipe(new ShapedOreRecipe( new ItemStack(blockYelloriumFuelRod, 1), "LCL", "LUL", "LCL", 'L', "ingotZirconium", 'C', "ingotGraphite", 'U', ModItems.rod_quad_empty));
 			}
 
 			if(blockReactorPart != null) {
 				ItemStack reactorPartStack = BigReactors.blockReactorPart.getReactorCasingItemStack();
 				reactorPartStack.stackSize = 4;
-				GameRegistry.addRecipe(new ShapedOreRecipe(reactorPartStack, "ICI", "CUC", "ICI", 'I', ironOrSteelIngot, 'C', "ingotGraphite", 'U', yelloriumIngot));
+				GameRegistry.addRecipe(new ShapedOreRecipe(reactorPartStack, "ICI", "CUC", "ICI", 'I', ironOrSteelIngot, 'C', "ingotGraphite", 'U', "ingotLead"));
 			}
 			
 			// Advanced Parts: Control Rod, Access Port, Power Tap, Controller
 			if(blockReactorPart != null) {
 				ItemStack reactorPartStack = BigReactors.blockReactorPart.getReactorControllerItemStack(); 
 				
-				GameRegistry.addRecipe(new ShapedOreRecipe(reactorPartStack, "C C", "GDG", "CRC", 'D', Items.diamond, 'G', yelloriumIngot, 'C', "reactorCasing", 'R', Items.redstone));
+				GameRegistry.addRecipe(new ShapedOreRecipe(reactorPartStack, "C C", "GDG", "CRC", 'D', Items.diamond, 'G', ModItems.circuit_red_copper, 'C', "reactorCasing", 'R', Items.redstone));
 
-				if(enableReactorPowerTapRecipe) {
-					reactorPartStack = BigReactors.blockReactorPart.getReactorPowerTapItemStack();
-					GameRegistry.addRecipe(new ShapedOreRecipe(reactorPartStack, "CRC", "R R", "CRC", 'C', "reactorCasing", 'R', Items.redstone));
-				}
+				//if(enableReactorPowerTapRecipe) {
+				//	reactorPartStack = BigReactors.blockReactorPart.getReactorPowerTapItemStack();
+				//	GameRegistry.addRecipe(new ShapedOreRecipe(reactorPartStack, "CRC", "R R", "CRC", 'C', "reactorCasing", 'R', Items.redstone));
+				//}
 
 				reactorPartStack = BigReactors.blockReactorPart.getAccessPortItemStack();
 				GameRegistry.addRecipe(new ShapedOreRecipe(reactorPartStack, "C C", " V ", "CPC", 'C', "reactorCasing", 'V', Blocks.chest, 'P', Blocks.piston));
@@ -391,23 +395,23 @@ public class BigReactors {
 				ItemStack reactorGlassStack = blockMultiblockGlass.getItemStack("reactor");
 				ItemStack turbineGlassStack = blockMultiblockGlass.getItemStack("turbine");
 				
-				if(useExpensiveGlass && (ItemHelper.oreNameExists("glassReinforced") || ItemHelper.oreNameExists("blockGlassHardened"))) {
+				/*if(useExpensiveGlass && (ItemHelper.oreNameExists("glassReinforced") || ItemHelper.oreNameExists("blockGlassHardened"))) {
 					GameRegistry.addRecipe(new ShapedOreRecipe(reactorGlassStack, "GCG", 'G', "glassReinforced", 'C', "reactorCasing"));
 					GameRegistry.addRecipe(new ShapedOreRecipe(reactorGlassStack, "GCG", 'G', "blockGlassHardened", 'C', "reactorCasing"));
 					
 					GameRegistry.addRecipe(new ShapedOreRecipe(turbineGlassStack, "GCG", 'G', "glassReinforced", 'C', "turbineHousing"));
 					GameRegistry.addRecipe(new ShapedOreRecipe(turbineGlassStack, "GCG", 'G', "blockGlassHardened", 'C', "turbineHousing"));
-				}
-				else {
-					GameRegistry.addRecipe(new ShapedOreRecipe(reactorGlassStack, "GCG", 'G', "blockGlassColorless", 'C', "reactorCasing"));
+				}*/
+				//else {
+					GameRegistry.addRecipe(new ShapedOreRecipe(reactorGlassStack, "GCG", 'G', ModBlocks.glass_uranium, 'C', "reactorCasing"));
 					GameRegistry.addRecipe(new ShapedOreRecipe(turbineGlassStack, "GCG", 'G', "blockGlassColorless", 'C', "turbineHousing"));
-				}
+				//}
 			}
 			
-			if(blockDevice != null) {
-				ItemStack cyaniteReprocessorStack = ((BlockBRDevice)blockDevice).getCyaniteReprocessorItemStack();
-				GameRegistry.addRecipe(new ShapedOreRecipe(cyaniteReprocessorStack, "CIC", "PFP", "CRC", 'C', "reactorCasing", 'I', ironOrSteelIngot, 'F', blockYelloriumFuelRod, 'P', Blocks.piston, 'R', Items.redstone));
-			}
+			//if(blockDevice != null) {
+			//	ItemStack cyaniteReprocessorStack = ((BlockBRDevice)blockDevice).getCyaniteReprocessorItemStack();
+			//	GameRegistry.addRecipe(new ShapedOreRecipe(cyaniteReprocessorStack, "CIC", "PFP", "CRC", 'C', "reactorCasing", 'I', ironOrSteelIngot, 'F', blockYelloriumFuelRod, 'P', Blocks.piston, 'R', Items.redstone));
+			//}
 			
 			if(blockReactorRedstonePort != null) {
 				ItemStack redstonePortStack = new ItemStack(BigReactors.blockReactorRedstonePort, 1);
@@ -422,8 +426,8 @@ public class BigReactors {
 				ItemStack turbineBearing = blockTurbinePart.getItemStack("bearing");
 
 				turbineHousing.stackSize = 4;
-				GameRegistry.addRecipe(new ShapedOreRecipe(turbineHousing, "IGI", "QCQ", "IGI", 'C', "ingotCyanite", 'I', ironOrSteelIngot, 'Q', Items.quartz, 'G', "ingotGraphite"));
-				GameRegistry.addRecipe(new ShapedOreRecipe(turbineController, "H H", "BDB", "H H", 'H', "turbineHousing", 'D', Items.diamond, 'B', blutoniumIngot));
+				GameRegistry.addRecipe(new ShapedOreRecipe(turbineHousing, "IGI", "QCQ", "IGI", 'C', "ingotTitanium", 'I', ironOrSteelIngot, 'Q', ModItems.ingot_dura_steel, 'G', "ingotGraphite"));
+				GameRegistry.addRecipe(new ShapedOreRecipe(turbineController, "H H", "BDB", "H H", 'H', "turbineHousing", 'D', Items.diamond, 'B', ModItems.circuit_red_copper));
 				GameRegistry.addRecipe(new ShapedOreRecipe(turbinePowerTap, "HRH", "R R", "HRH", 'H', "turbineHousing", 'R', Items.redstone));
 				GameRegistry.addRecipe(new ShapedOreRecipe(turbineFluidPort, "H H", "IVI", "HPH", 'H', "turbineHousing", 'I', ironOrSteelIngot, 'V', Items.bucket, 'P', Blocks.piston));
 				GameRegistry.addRecipe(new ShapedOreRecipe(turbineBearing, "HRH", "DDD", "HRH", 'H', "turbineHousing", 'D', Items.diamond, 'R', "turbineRotorShaft"));
@@ -439,8 +443,8 @@ public class BigReactors {
 				ItemStack rotorShaft = blockTurbineRotorPart.getItemStack("rotor");
 				ItemStack rotorBlade = blockTurbineRotorPart.getItemStack("blade");
 
-				GameRegistry.addRecipe(new ShapedOreRecipe(rotorShaft, "ICI", 'C', "ingotCyanite", 'I', ironOrSteelIngot));
-				GameRegistry.addRecipe(new ShapedOreRecipe(rotorBlade, "CII", 'C', "ingotCyanite", 'I', ironOrSteelIngot));
+				GameRegistry.addRecipe(new ShapedOreRecipe(rotorShaft, "ICI", 'C', ModItems.ingot_dura_steel, 'I', ironOrSteelIngot));
+				GameRegistry.addRecipe(new ShapedOreRecipe(rotorBlade, "CII", 'C', ModItems.ingot_dura_steel, 'I', ironOrSteelIngot));
 			}
 			
 			registerGameBalanceData();
@@ -457,12 +461,13 @@ public class BigReactors {
 	{
 		if (!registeredTileEntities)
 		{
-			GameRegistry.registerTileEntity(TileEntityReactorPowerTap.class, 	"BRReactorPowerTap");
+			//GameRegistry.registerTileEntity(TileEntityReactorPowerTap.class, 	"BRReactorPowerTap");
 			GameRegistry.registerTileEntity(TileEntityReactorPart.class, 		"BRReactorPart");
 			GameRegistry.registerTileEntity(TileEntityReactorAccessPort.class,	"BRReactorAccessPort");
 			GameRegistry.registerTileEntity(TileEntityReactorGlass.class,		"BRReactorGlass");
 			GameRegistry.registerTileEntity(TileEntityReactorFuelRod.class, 			"BRFuelRod");
-			GameRegistry.registerTileEntity(TileEntityCyaniteReprocessor.class, "BRCyaniteReprocessor");
+			//GameRegistry.registerTileEntity(TileEntityCyaniteReprocessor.class, "BRCyaniteReprocessor");
+			//GameRegistry.registerTileEntity(TileEntityReactorIrradiatorRod.class, 			"BRIrradiatorRod");
 			
 			GameRegistry.registerTileEntity(TileEntityReactorControlRod.class, "BRReactorControlRod");
 			GameRegistry.registerTileEntity(TileEntityReactorRedNetPort.class, "BRReactorRedNetPort");
@@ -488,21 +493,21 @@ public class BigReactors {
 	public static ItemStack registerOres(int i, boolean b) {
 		BRConfig.CONFIGURATION.load();
 
-		if (blockYelloriteOre == null) {
+		/*if (blockYelloriteOre == null) {
 			blockYelloriteOre = new BlockBROre();
 			GameRegistry.registerBlock(BigReactors.blockYelloriteOre, ItemBlockBigReactors.class, "YelloriteOre");
 			ItemStack yelloriteStack = new ItemStack(blockYelloriteOre, 1);
 			OreDictionary.registerOre("oreYellorite", yelloriteStack);
 			OreDictionary.registerOre("oreYellorium", yelloriteStack); // For convenience of mods which fiddle with recipes
-		}
+		}*/
 
-		if(blockMetal == null) {
-			blockMetal = new BlockBRMetal();
-			GameRegistry.registerBlock(BigReactors.blockMetal, ItemBlockBigReactors.class, "BRMetalBlock");
-			blockMetal.registerOreDictEntries();
-		}
+		//if(blockMetal == null) {
+		//	blockMetal = new BlockBRMetal();
+		//	GameRegistry.registerBlock(BigReactors.blockMetal, ItemBlockBigReactors.class, "BRMetalBlock");
+		//	blockMetal.registerOreDictEntries();
+		//}
 
-		boolean genYelloriteOre = BRConfig.CONFIGURATION.get("WorldGen", "GenerateYelloriteOre", true, "Add yellorite ore during world generation?").getBoolean(true);
+		/*boolean genYelloriteOre = BRConfig.CONFIGURATION.get("WorldGen", "GenerateYelloriteOre", true, "Add yellorite ore during world generation?").getBoolean(true);
 		if (yelloriteOreGeneration == null && genYelloriteOre)
 		{
 			// Magic number: 1 = stone
@@ -531,11 +536,11 @@ public class BigReactors {
 
 			BRWorldGenerator.addGenerator(BigReactors.yelloriteOreGeneration);
 			BRWorldGenerator.addGenerator(yelloriteOreGeneration2);
-		}
+		}*/
 		
 		BRConfig.CONFIGURATION.save();
 
-		return new ItemStack(blockYelloriteOre);
+		return new ItemStack(blockMetal);
 	}
 
 
@@ -555,12 +560,12 @@ public class BigReactors {
 			}
 			
 			// Add aliases, if appropriate
-			if(registerYelloriumAsUranium) {
-				OreDictionary.registerOre("ingotUranium", ingotGeneric.getItemStackForType("ingotYellorium"));
-				OreDictionary.registerOre("ingotPlutonium", ingotGeneric.getItemStackForType("ingotBlutonium"));
-				OreDictionary.registerOre("dustUranium", ingotGeneric.getItemStackForType("dustYellorium"));
-				OreDictionary.registerOre("dustPlutonium", ingotGeneric.getItemStackForType("dustBlutonium"));
-			}
+			//if(registerYelloriumAsUranium) {
+			//	OreDictionary.registerOre("ingotUranium", ingotGeneric.getItemStackForType("ingotYellorium"));
+			//	OreDictionary.registerOre("ingotPlutonium", ingotGeneric.getItemStackForType("ingotBlutonium"));
+			//	OreDictionary.registerOre("dustUranium", ingotGeneric.getItemStackForType("dustYellorium"));
+			//	OreDictionary.registerOre("dustPlutonium", ingotGeneric.getItemStackForType("dustBlutonium"));
+			//}
 
 			BRConfig.CONFIGURATION.save();
 		}
@@ -587,7 +592,7 @@ public class BigReactors {
 
 			OreDictionary.registerOre("reactorCasing", BigReactors.blockReactorPart.getReactorCasingItemStack());
 			OreDictionary.registerOre("reactorController", BigReactors.blockReactorPart.getReactorControllerItemStack());
-			OreDictionary.registerOre("reactorPowerTap", BigReactors.blockReactorPart.getReactorPowerTapItemStack());
+			//OreDictionary.registerOre("reactorPowerTap", BigReactors.blockReactorPart.());
 			OreDictionary.registerOre("reactorRedNetPort", BigReactors.blockReactorPart.getRedNetPortItemStack());
 			OreDictionary.registerOre("reactorComputerPort", BigReactors.blockReactorPart.getComputerPortItemStack());
 			OreDictionary.registerOre("reactorCoolantPort", BigReactors.blockReactorPart.getCoolantPortItemStack());
@@ -646,18 +651,18 @@ public class BigReactors {
 		}
 	}
 	
-	public static void registerDevices(int id, boolean require) {
-		if(BigReactors.blockDevice == null) {
-			BRConfig.CONFIGURATION.load();
+	/*public static void registerDevices(int id, boolean require) {
+		//if(BigReactors.blockDevice == null) {
+		//	BRConfig.CONFIGURATION.load();
 
-			BigReactors.blockDevice = new BlockBRDevice(Material.iron);
-			GameRegistry.registerBlock(BigReactors.blockDevice, ItemBlockBigReactors.class, "BRDevice");
+			//BigReactors.blockDevice = new BlockBRDevice(Material.iron);
+			//GameRegistry.registerBlock(BigReactors.blockDevice, ItemBlockBigReactors.class, "BRDevice");
 			
-			OreDictionary.registerOre("brDeviceCyaniteProcessor", ((BlockBRDevice)BigReactors.blockDevice).getCyaniteReprocessorItemStack());
+			//OreDictionary.registerOre("brDeviceCyaniteProcessor", ((BlockBRDevice)BigReactors.blockDevice).getCyaniteReprocessorItemStack());
 			
 			BRConfig.CONFIGURATION.save();
 		}
-	}
+	}*/
 	
 	public static void registerCreativeParts(int id, boolean require) {
 		BRConfig.CONFIGURATION.load();
@@ -672,7 +677,7 @@ public class BigReactors {
 	}
 	
 	public static void registerFluids(int id, boolean require) {
-		if(BigReactors.fluidYelloriumStill == null) {
+		/*if(BigReactors.fluidYelloriumStill == null) {
 			BRConfig.CONFIGURATION.load();
 			
 			BigReactors.fluidYellorium = FluidRegistry.getFluid("yellorium");
@@ -736,8 +741,29 @@ public class BigReactors {
 			}
 
 			BRConfig.CONFIGURATION.save();
-		}
+		}*/
 		
+		/*BigReactors.fluidRadioactiveWater = FluidRegistry.getFluid("radioactive_water");
+		if(fluidRadioactiveWater == null) {
+			fluidRadioactiveWater = new Fluid("radioactive_water");
+			fluidRadioactiveWater.setDensity(100);
+			fluidRadioactiveWater.setGaseous(false);
+			fluidRadioactiveWater.setLuminosity(10);
+			fluidRadioactiveWater.setRarity(EnumRarity.uncommon);
+			fluidRadioactiveWater.setTemperature(295);
+			fluidRadioactiveWater.setViscosity(100);
+			fluidRadioactiveWater.setUnlocalizedName("bigreactors.radioactiveWater.still");
+			FluidRegistry.registerFluid(fluidRadioactiveWater);
+		}
+
+		//RadioactiveWaterBlock liqRW = new RadioactiveWaterBlock(fluidRadioactiveWater, Material.water, ModDamageSource.radiation);
+		//BigReactors.fluidRadioactiveWaterStill = liqRW;
+		
+		//GameRegistry.registerBlock(BigReactors.fluidRadioactiveWaterStill, ItemBlock.class, BigReactors.fluidRadioactiveWaterStill.getUnlocalizedName());
+
+		//fluidYelloriumBucketItem = (new ItemBRBucket(liqY)).setUnlocalizedName("bucket.yellorium").setMaxStackSize(1).setContainerItem(Items.bucket);
+        //GameRegistry.registerItem(fluidYelloriumBucketItem, "bucketYellorium");
+		*/
 		fluidSteam = FluidRegistry.getFluid("steam");
 		registeredOwnSteam = false;
 		if(fluidSteam == null) {
@@ -764,25 +790,100 @@ public class BigReactors {
 	// This must be done in init or later
 	protected static void registerGameBalanceData() {
 		// Register ingot & block => reactant mappings
-		StandardReactants.yelloriumMapping = Reactants.registerSolid("ingotYellorium", StandardReactants.yellorium);
-		StandardReactants.cyaniteMapping = Reactants.registerSolid("ingotCyanite", StandardReactants.cyanite);
+		//StandardReactants.yelloriumMapping = Reactants.registerSolid("ingotYellorium", StandardReactants.yellorium);
+		//StandardReactants.cyaniteMapping = Reactants.registerSolid("ingotCyanite", StandardReactants.cyanite);
 
-		Reactants.registerSolid("ingotBlutonium",  StandardReactants.blutonium);
+		//Reactants.registerSolid("ingotBlutonium",  StandardReactants.blutonium);
 		
-		ItemStack blockYellorium = blockMetal.getItemStackForMaterial("Yellorium");
-		Reactants.registerSolid(blockYellorium, StandardReactants.yellorium, Reactants.standardSolidReactantAmount * 9);
+//		ItemStack blockYellorium = blockMetal.getItemStackForMaterial("Yellorium");
+//		Reactants.registerSolid(blockYellorium, StandardReactants.yellorium, Reactants.standardSolidReactantAmount * 9);
 
-		ItemStack blockBlutonium = blockMetal.getItemStackForMaterial("Blutonium");
-		Reactants.registerSolid(blockBlutonium, StandardReactants.blutonium, Reactants.standardSolidReactantAmount * 9);
+//		ItemStack blockBlutonium = blockMetal.getItemStackForMaterial("Blutonium");
+//		Reactants.registerSolid(blockBlutonium, StandardReactants.blutonium, Reactants.standardSolidReactantAmount * 9);
 
-		// Register fluid => reactant mappings
-		Reactants.registerFluid(fluidYellorium, StandardReactants.yellorium);
-		Reactants.registerFluid(fluidCyanite, StandardReactants.cyanite);
+		Item thoriumFuel = ModItems.billet_thorium_fuel;
+		//Item thoriumNugget = ModItems.nugget_thorium_fuel;
+		Item thoriumWaste = new ItemStack(ModItems.waste_thorium, 1, 1).getItem();
+		//Item uranium = ModItems.ingot_uranium;
+		//Item natUraniumNugget = ModItems.nugget_uranium;
+		Item uraniumFuel = ModItems.billet_uranium_fuel;
+		//Item uraniumNugget = ModItems.nugget_uranium_fuel;
+		Item uraniumWaste = new ItemStack(ModItems.waste_uranium, 1, 1).getItem();
+		Item moxFuel = ModItems.billet_mox_fuel;
+		//Item moxNugget = ModItems.nugget_mox_fuel;
+		Item moxWaste = new ItemStack(ModItems.waste_mox, 1, 1).getItem();
+		//Item plutonium = ModItems.ingot_plutonium;
+		//Item mixedPlutoniumNugget = ModItems.nugget_plutonium;
+		Item plutoniumFuel = ModItems.billet_plutonium_fuel;
+		//Item plutoniumNugget = ModItems.nugget_plutonium_fuel;
+		Item plutoniumWaste = new ItemStack(ModItems.waste_plutonium, 1, 1).getItem();
+		Item schrabidiumFuel = ModItems.billet_schrabidium_fuel;
+		//Item schrabidiumNugget = ModItems.nugget_schrabidium_fuel;
+		Item schrabidiumWaste = new ItemStack(ModItems.waste_schrabidium, 1, 1).getItem();
+		
+		if(uraniumFuel != null)
+        {
+            OreDictionary.registerOre("ThoriumFuel", thoriumFuel);
+            //OreDictionary.registerOre("ThoriumNugget", thoriumNugget);
+            OreDictionary.registerOre("ThoriumWaste", thoriumWaste);
+            //OreDictionary.registerOre("NaturalUranium", uranium);
+            //OreDictionary.registerOre("NaturalUraniumNugget", natUraniumNugget);
+            OreDictionary.registerOre("UraniumFuel", uraniumFuel);
+            //OreDictionary.registerOre("UraniumNugget", uraniumNugget);
+            OreDictionary.registerOre("UraniumWaste", uraniumWaste);
+            OreDictionary.registerOre("MOXFuel", moxFuel);
+            //OreDictionary.registerOre("MOXNugget", moxNugget);
+            OreDictionary.registerOre("MOXWaste", moxWaste);
+           // OreDictionary.registerOre("Plutonium", plutonium);
+           // OreDictionary.registerOre("MixedPlutoniumNugget", mixedPlutoniumNugget);
+            OreDictionary.registerOre("PlutoniumFuel", plutoniumFuel);
+            //OreDictionary.registerOre("PlutoniumNugget", plutoniumNugget);
+            OreDictionary.registerOre("PlutoniumWaste", plutoniumWaste);
+            OreDictionary.registerOre("SchrabidiumFuel", schrabidiumFuel);
+            //OreDictionary.registerOre("SchrabidiumNugget", schrabidiumNugget);
+            OreDictionary.registerOre("SchrabidiumWaste", schrabidiumWaste);
+        }
+		Reactants.registerSolid("ThoriumFuel", StandardReactants.thorium);
+		//Reactants.registerSolid("ThoriumNugget", StandardReactants.thorium);
+		Reactants.registerSolid("ThoriumWaste", StandardReactants.thoriumWaste);
+		//Reactants.registerSolid("ingotUranium", StandardReactants.natUranium, Reactants.standardSolidReactantAmount * 9);
+		//Reactants.registerSolid("nuggetUranium", StandardReactants.natUranium);
+		Reactants.registerSolid("UraniumFuel", StandardReactants.uranium);
+		//Reactants.registerSolid("UraniumNugget", StandardReactants.uranium);
+		Reactants.registerSolid("UraniumWaste", StandardReactants.uraniumWaste);
+		Reactants.registerSolid("MOXFuel", StandardReactants.MOX);		
+		//Reactants.registerSolid("MOXNugget", StandardReactants.MOX);
+		Reactants.registerSolid("MOXWaste", StandardReactants.MOXWaste);			
+		//Reactants.registerSolid("ingotPlutonium", StandardReactants.mixPlutonium, Reactants.standardSolidReactantAmount * 9);
+		//Reactants.registerSolid("nuggetPlutonium", StandardReactants.mixPlutonium);
+		Reactants.registerSolid("PlutoniumFuel", StandardReactants.plutonium);
+		//Reactants.registerSolid("PlutoniumNugget", StandardReactants.plutonium);
+		Reactants.registerSolid("PlutoniumWaste", StandardReactants.plutoniumWaste);
+		Reactants.registerSolid("SchrabidiumFuel", StandardReactants.schrabidium);
+		//Reactants.registerSolid("SchrabidiumNugget", StandardReactants.schrabidium);
+		Reactants.registerSolid("SchrabidiumWaste", StandardReactants.schrabidiumWaste);
+		
+	    Reactants.registerReactant("uFuel", 0, 0x70CC13);
+	    Reactants.registerReactant("IC2plutonium", 1, 11184810);
+	    
+	    Reactants.registerSolid("IC2uraniumFuel", "uFuel", Reactants.standardSolidReactantAmount * 9);
+	    Reactants.registerSolid("IC2tinyPlutonium", "IC2plutonium", Reactants.standardSolidReactantAmount * 9);
+		
+		// Register fluid => reactant mappingss
+		//Reactants.registerFluid(fluidYellorium, StandardReactants.yellorium);
+		//Reactants.registerFluid(fluidCyanite, StandardReactants.cyanite);
 		
 		// Register reactant => reactant conversions for making cyanite
-		ReactorConversions.register(StandardReactants.yellorium, StandardReactants.cyanite);
-		ReactorConversions.register(StandardReactants.blutonium, StandardReactants.cyanite);
+		//ReactorConversions.register(StandardReactants.yellorium, StandardReactants.cyanite);
+		//ReactorConversions.register(StandardReactants.blutonium, StandardReactants.cyanite);
 		
+		ReactorConversions.register(StandardReactants.thorium, StandardReactants.thoriumWaste, 0.9F, 0.004F);
+		//ReactorConversions.register(StandardReactants.natUranium, StandardReactants.mixPlutonium, 0F, 0.001F);
+		ReactorConversions.register(StandardReactants.uranium, StandardReactants.uraniumWaste);
+		ReactorConversions.register(StandardReactants.MOX, StandardReactants.MOXWaste, 1.06F, 0.004F);
+		ReactorConversions.register(StandardReactants.plutonium, StandardReactants.plutoniumWaste, 1.1F, 0.004F);
+		ReactorConversions.register(StandardReactants.schrabidium, StandardReactants.schrabidiumWaste, 1.5F, 0.01F);
+	    ReactorConversions.register("uFuel", "IC2plutonium");
 		BRConfig.CONFIGURATION.load();
 		boolean enableFantasyMetals = BRConfig.CONFIGURATION.get("General", "enableMetallurgyFantasyMetalsInTurbines", true, "If true, allows Metallurgy's fantasy metals to be used as part of turbine coils. Default: true").getBoolean(true);
 		boolean enableComedy 		= BRConfig.CONFIGURATION.get("General", "enableComedy", true, "If true, allows weird stuff inside reactors, like MFR sewage and pink slime. Default: true").getBoolean(true);
@@ -808,7 +909,7 @@ public class BigReactors {
 		TurbineCoil.registerBlock("blockTitanium",	3.1f, 1f, 2.7f);	// Mariculture
 		TurbineCoil.registerBlock("blockEnderium",	3.0f, 1.02f, 3.0f);	// TE, note tiny energy bonus!	(14% at 1000RF/t output)
 
-		TurbineCoil.registerBlock("blockLudicrite",  3.5f, 1.02f, 3.5f);
+		TurbineCoil.registerBlock("coilSchrabidium",  3.5f, 1.02f, 3.5f);
 		
 		if(enableFantasyMetals) {
 			// Metallurgy fantasy metals
@@ -825,7 +926,7 @@ public class BigReactors {
 		ReactorInterior.registerBlock("blockGold",		0.52f, 0.80f, 1.45f, IHeatEntity.conductivityGold);
 		ReactorInterior.registerBlock("blockDiamond",		0.55f, 0.85f, 1.50f, IHeatEntity.conductivityDiamond);
 		ReactorInterior.registerBlock("blockEmerald",		0.55f, 0.85f, 1.50f, IHeatEntity.conductivityEmerald);
-		ReactorInterior.registerBlock("blockGraphite",	0.10f, 0.50f, 2.00f, IHeatEntity.conductivityGold); // Graphite: a great moderator!
+		ReactorInterior.registerBlock("blockGraphite",	0.10f, 0.50f, 2.00f, IHeatEntity.conductivityRubber); // Graphite: a great moderator!
 		ReactorInterior.registerBlock("blockGlassColorless", 0.20f, 0.25f, 1.10f, IHeatEntity.conductivityGlass);
 		ReactorInterior.registerBlock("blockIce",			0.33f, 0.33f, 1.15f, IHeatEntity.conductivityWater);
 		ReactorInterior.registerBlock("blockSnow",		0.15f, 0.33f, 1.05f, IHeatEntity.conductivityWater / 2f);
@@ -859,7 +960,9 @@ public class BigReactors {
 		}
 
 		//Water: 0.33f, 0.5f, 1.33f
+		ReactorInterior.registerFluid("ic2coolant", 0.66F, 0.95F, 6F, IHeatEntity.conductivityDiamond);
 		ReactorInterior.registerFluid("water", RadiationHelper.waterData.absorption, RadiationHelper.waterData.heatEfficiency, RadiationHelper.waterData.moderation, IHeatEntity.conductivityWater);
+		ReactorInterior.registerFluid("radioactive_fluid", RadiationHelper.waterData.absorption, RadiationHelper.waterData.heatEfficiency, RadiationHelper.waterData.moderation, IHeatEntity.conductivityWater);
 		ReactorInterior.registerFluid("redstone",		0.75f, 0.55f, 1.60f, IHeatEntity.conductivityEmerald);
 		ReactorInterior.registerFluid("glowstone",	0.20f, 0.60f, 1.75f, IHeatEntity.conductivityCopper);
 		ReactorInterior.registerFluid("cryotheum",	0.66f, 0.95f, 6.00f, IHeatEntity.conductivityDiamond); // Cryotheum: an amazing moderator!
@@ -877,6 +980,21 @@ public class BigReactors {
 		}
 	}
 	
+	  public static Item getByNameOrId(String id)
+	  {
+	    Item item = (Item)GameData.getItemRegistry().getObject(id);
+	    if (item != null) {
+	      return item;
+	    }
+	    try
+	    {
+	      int numericId = Integer.parseInt(id);
+	      return (Item)GameData.getItemRegistry().getObjectById(numericId);
+	    }
+	    catch (NumberFormatException localNumberFormatException) {}
+	    return null;
+	  }
+	
 	public static void registerItems() {
 		if(itemDebugTool == null) {
 			itemDebugTool = new ItemBeefDebugTool();
@@ -887,8 +1005,8 @@ public class BigReactors {
 	// Thanks KingLemming!
 	@SideOnly(Side.CLIENT)
 	public static void registerNonBlockFluidIcons(TextureMap map) {
-		iconFuelColumnStill = map.registerIcon(TEXTURE_NAME_PREFIX + "fluid.fuelColumn.still");
-		iconFuelColumnFlowing = map.registerIcon(TEXTURE_NAME_PREFIX + "fluid.fuelColumn.flowing");
+		//iconFuelColumnStill = map.registerIcon(TEXTURE_NAME_PREFIX + "fluid.fuelColumn.still");
+		//iconFuelColumnFlowing = map.registerIcon(TEXTURE_NAME_PREFIX + "fluid.fuelColumn.flowing");
 		
 		if(registeredOwnSteam) {
 			iconSteamStill = map.registerIcon(TEXTURE_NAME_PREFIX + "fluid.steam.still");
@@ -899,7 +1017,7 @@ public class BigReactors {
 
 	@SideOnly(Side.CLIENT)
 	public static void setNonBlockFluidIcons() {
-		fluidFuelColumn.setIcons(iconFuelColumnStill, iconFuelColumnFlowing);
+		//fluidFuelColumn.setIcons(iconFuelColumnStill, iconFuelColumnFlowing);
 		
 		if(registeredOwnSteam) {
 			fluidSteam.setIcons(iconSteamStill, iconSteamFlowing);

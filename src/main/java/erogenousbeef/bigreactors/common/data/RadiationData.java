@@ -8,7 +8,7 @@ public class RadiationData {
 	public float environmentRfChange = 0f; // Amount of RF absorbed by the environment
 	public float fuelRfChange = 0f;		   // Amount of RF absorbed by the fuel
 	public float fuelAbsorbedRadiation = 0f; // in rad-units
-
+	
 	public RadiationData() {
 		fuelUsage = 0f;
 		environmentRfChange = 0f;

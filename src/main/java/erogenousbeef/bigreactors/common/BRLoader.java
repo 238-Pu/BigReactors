@@ -1,14 +1,5 @@
 package erogenousbeef.bigreactors.common;
 
-import net.minecraft.block.Block;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.player.FillBucketEvent;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -18,10 +9,11 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.eventhandler.Event.Result;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import erogenousbeef.bigreactors.common.data.StandardReactants;
 import erogenousbeef.core.multiblock.MultiblockEventHandler;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 
 @Mod(modid = BRLoader.MOD_ID, name = BigReactors.NAME, version = BRConfig.VERSION, acceptedMinecraftVersions = BRConfig.MINECRAFT_VERSION, dependencies = BRLoader.DEPENDENCIES)
 public class BRLoader {
@@ -48,7 +40,7 @@ public class BRLoader {
 		BigReactors.registerFuelRods(0, true);
 		BigReactors.registerReactorPartBlocks(0, true);
 		BigReactors.registerTurbineParts();
-		BigReactors.registerDevices(0,  true);
+		//BigReactors.registerDevices(0,  true);
 		BigReactors.registerFluids(0,  true);
 		BigReactors.registerCreativeParts(0, true);
 		BigReactors.registerItems();
@@ -87,7 +79,7 @@ public class BRLoader {
 	// GAME EVENT HANDLERS
 	// FORGE EVENT HANDLERS
 
-	// Handle bucketing of reactor fluids
+	/* Handle bucketing of reactor fluids
 	@SubscribeEvent
     public void onBucketFill(FillBucketEvent e)
     {
@@ -104,11 +96,11 @@ public class BRLoader {
         }
     }
     
-    private ItemStack fillBucket(World world, MovingObjectPosition mop)
-    {
-        Block block = world.getBlock(mop.blockX, mop.blockY, mop.blockZ);
-        if(block == BigReactors.fluidCyaniteStill) return new ItemStack(BigReactors.fluidCyaniteBucketItem);
-        else if(block == BigReactors.fluidYelloriumStill) return new ItemStack(BigReactors.fluidYelloriumBucketItem);
-        else return null;
-    }
+    //private ItemStack fillBucket(World world, MovingObjectPosition mop)
+    //{
+    //    Block block = world.getBlock(mop.blockX, mop.blockY, mop.blockZ);
+    //    if(block == BigReactors.fluidCyaniteStill) return new ItemStack(BigReactors.fluidCyaniteBucketItem);
+    //    else if(block == BigReactors.fluidYelloriumStill) return new ItemStack(BigReactors.fluidYelloriumBucketItem);
+    //    else return null;
+    //}*/
 }

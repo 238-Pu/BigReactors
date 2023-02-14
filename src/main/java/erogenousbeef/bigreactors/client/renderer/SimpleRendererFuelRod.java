@@ -1,12 +1,5 @@
 package erogenousbeef.bigreactors.client.renderer;
 
-import net.minecraft.block.Block;
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.IBlockAccess;
-
 import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
@@ -17,11 +10,21 @@ import erogenousbeef.bigreactors.common.data.StandardReactants;
 import erogenousbeef.bigreactors.common.multiblock.MultiblockReactor;
 import erogenousbeef.bigreactors.common.multiblock.block.BlockFuelRod;
 import erogenousbeef.bigreactors.common.multiblock.tileentity.TileEntityReactorFuelRod;
+import net.minecraft.block.Block;
+import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.init.Blocks;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.IBlockAccess;
 
 public class SimpleRendererFuelRod implements ISimpleBlockRenderingHandler {
 
 	private static final float FLUID_RENDER_OFFSET_MAX = 0.05f;
 	private static final float FLUID_RENDER_OFFSET_MIN = 0.45f;
+	
+	private final ResourceLocation Glow = new ResourceLocation(BigReactors.TEXTURE_NAME_PREFIX + "glow");
 	
 	public SimpleRendererFuelRod() {
 	}
@@ -89,7 +92,8 @@ public class SimpleRendererFuelRod implements ISimpleBlockRenderingHandler {
         // Render internal bits, if we can
         TileEntity te;
         te = world.getTileEntity(x, y, z);
-        if(te instanceof TileEntityReactorFuelRod) {
+        if(te instanceof TileEntityReactorFuelRod) {    
+        	
         	TileEntityReactorFuelRod fuelRod = (TileEntityReactorFuelRod)te;
         	if(fuelRod.isConnected()) {
         		MultiblockReactor reactor = (MultiblockReactor)fuelRod.getMultiblockController();
@@ -101,18 +105,46 @@ public class SimpleRendererFuelRod implements ISimpleBlockRenderingHandler {
         			// Okay, we're connected and have some kind of fluid inside. Let's do this.
         	        float fluidColumnOffsetFromCenter = -1f;
         	        float red, green, blue;
-        	        IIcon iconSide, iconBottom;
+        	        IIcon iconSide, iconBottom, glow;
         	        iconSide = iconBottom = null;
         	        red = green = blue = 1f;
 
-    	    		iconSide = BigReactors.fluidFuelColumn.getFlowingIcon();
-    	    		iconBottom = BigReactors.fluidFuelColumn.getStillIcon();
+    	    		iconSide = Blocks.iron_block.getIcon(0, 0);
+    	    		iconBottom = Blocks.iron_block.getIcon(0, 0);
+    	    		
+    	        	/*GL11.glPushMatrix();
+
+    	            //bindTexture(glow);
+
+    	            // Make glass and fuel transparent?
+    	           // if (isTransparent) {
+    	                GL11.glEnable(GL11.GL_BLEND);
+    	           // } else {
+    	            //    RenderHelper.disableStandardItemLighting();
+    	            //}
+
+    	            GL11.glTranslated(x+0.5, y+0.5, z+0.5);
+    	            GL11.glScaled(0.48, 0.9, 0.48);
+    	            ModelCube.instance.render();
+
+    	            //if (isTransparent) {
+    	                GL11.glDisable(GL11.GL_BLEND);
+    	            //} else {
+    	            //    RenderHelper.enableStandardItemLighting();
+    	            //}
+
+    	            GL11.glPopMatrix();*/
 
     	    		ReactantData fuelData = Reactants.getReactant(reactor.getFuelType());
     	    		ReactantData wasteData = Reactants.getReactant(reactor.getWasteType());
         	        
-    	    		int fuelColor = fuelData != null ? fuelData.getColor() : StandardReactants.colorYellorium;
-    	    		int wasteColor = wasteData != null ? wasteData.getColor() : StandardReactants.colorCyanite;
+    	    		int fuelColor = fuelData != null ? fuelData.getColor() : StandardReactants.colorUranium;
+    	    		int wasteColor = wasteData != null ? wasteData.getColor() : StandardReactants.colorPlutonium;
+    	    		
+    	    		//if(reactor.getActive())
+    	    		//{
+    	    		//	fuelColor = 0x8BEEF7;
+    	    		//}
     	    		
         	    	if(fuelAmount == 0) {
         	        	red = unpackR(wasteColor);

@@ -2,9 +2,6 @@ package erogenousbeef.bigreactors.common;
 
 import java.util.Calendar;
 
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.client.event.TextureStitchEvent;
 import cofh.api.modhelpers.ThermalExpansionHelper;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
@@ -13,16 +10,17 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import erogenousbeef.bigreactors.api.registry.Reactants;
-import erogenousbeef.bigreactors.common.data.StandardReactants;
 import erogenousbeef.bigreactors.common.item.ItemIngot;
 import erogenousbeef.bigreactors.gui.BigReactorsGUIHandler;
 import erogenousbeef.bigreactors.net.CommonPacketHandler;
 import erogenousbeef.bigreactors.utils.intermod.IMCHelper;
 import erogenousbeef.bigreactors.utils.intermod.ModHelperBase;
 import erogenousbeef.bigreactors.utils.intermod.ModHelperComputerCraft;
-import erogenousbeef.bigreactors.utils.intermod.ModHelperMekanism;
+//import erogenousbeef.bigreactors.utils.intermod.ModHelperMekanism;
 import erogenousbeef.core.multiblock.MultiblockServerTickHandler;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.client.event.TextureStitchEvent;
 
 public class CommonProxy {
 
@@ -48,7 +46,7 @@ public class CommonProxy {
 
 	private void sendInterModAPIMessages() {
 		ItemIngot ingotGeneric = BigReactors.ingotGeneric;
-		ItemStack yelloriteOre 	= new ItemStack(BigReactors.blockYelloriteOre, 1);
+		//ItemStack yelloriteOre 	= new ItemStack(BigReactors.blockYelloriteOre, 1);
 
 		final int YELLORIUM = 0;
 		
@@ -61,19 +59,19 @@ public class CommonProxy {
 			dusts[i] = ingotGeneric.getDustItem(names[i]);
 		}
 		
-		ItemStack doubledYelloriumDust = null;
-		if(dusts[YELLORIUM] != null) {
-			doubledYelloriumDust = dusts[YELLORIUM].copy();
-			doubledYelloriumDust.stackSize = 2;
-		}
+		//ItemStack doubledYelloriumDust = null;
+		//if(dusts[YELLORIUM] != null) {
+		//	doubledYelloriumDust = dusts[YELLORIUM].copy();
+		//	doubledYelloriumDust.stackSize = 2;
+		//}
 
-		if(Loader.isModLoaded("ThermalExpansion")) {
-			ItemStack sandStack = new ItemStack(Blocks.sand, 1);
-			ItemStack doubleYellorium = ingots[YELLORIUM].copy();
-			doubleYellorium.stackSize = 2;
+		/*if(Loader.isModLoaded("ThermalExpansion")) {
+			//ItemStack sandStack = new ItemStack(Blocks.sand, 1);
+			//ItemStack doubleYellorium = ingots[YELLORIUM].copy();
+			//doubleYellorium.stackSize = 2;
 
 			// TODO: Remove ThermalExpansionHelper once addSmelterRecipe and addPulverizerRecipe aren't broken
-			if(ingots[YELLORIUM] != null) {
+			/*if(ingots[YELLORIUM] != null) {
 				ThermalExpansionHelper.addFurnaceRecipe(400, yelloriteOre, ingots[YELLORIUM]);
 				ThermalExpansionHelper.addSmelterRecipe(1600, yelloriteOre, sandStack, doubleYellorium);
 			}
@@ -96,20 +94,20 @@ public class CommonProxy {
 
 				ThermalExpansionHelper.addSmelterRecipe(200, doubleDust, sandStack, doubleIngot);
 			}
-		} // END: IsModLoaded - ThermalExpansion
+		}*/ // END: IsModLoaded - ThermalExpansion
 		
-		if(Loader.isModLoaded("MineFactoryReloaded")) {
+		/*if(Loader.isModLoaded("MineFactoryReloaded")) {
 			// Add yellorite to yellow focus list.
 			IMCHelper.MFR.addOreToMiningLaserFocus(yelloriteOre, 2);
             
             // Make Yellorite the 'preferred' ore for lime focus
             IMCHelper.MFR.setMiningLaserFocusPreferredOre(yelloriteOre, 9);
-		} // END: IsModLoaded - MineFactoryReloaded
+		}*/ // END: IsModLoaded - MineFactoryReloaded
 		
 		if(Loader.isModLoaded("appliedenergistics2")) {
-			if(doubledYelloriumDust != null) {
-				IMCHelper.AE2.addGrinderRecipe(yelloriteOre, doubledYelloriumDust, 4);
-			}
+			//if(doubledYelloriumDust != null) {
+			//	IMCHelper.AE2.addGrinderRecipe(yelloriteOre, doubledYelloriumDust, 4);
+			//}
 		
 			for(int i = 0; i < ingots.length; i++) {
 				if(ingots[i] == null || dusts[i] == null) { continue; }
@@ -125,9 +123,9 @@ public class CommonProxy {
 															"If true, automatically adds all "
 															+"unregistered ingots found as clones"
 															+"of standard yellorium fuel").getBoolean(true);
-		if(autoAddUranium) {
-			Reactants.registerSolid("ingotUranium", StandardReactants.yellorium);
-		}
+		//if(autoAddUranium) {
+		//	Reactants.registerSolid("ingotUranium", StandardReactants.natUranium);
+		//}
 
 		BRConfig.CONFIGURATION.save();
 		
@@ -157,7 +155,7 @@ public class CommonProxy {
 		modHelper = new ModHelperComputerCraft();
 		modHelper.register();
 		
-		modHelper = new ModHelperMekanism();
-		modHelper.register();
+		//modHelper = new ModHelperMekanism();
+		//modHelper.register();
 	}
 }

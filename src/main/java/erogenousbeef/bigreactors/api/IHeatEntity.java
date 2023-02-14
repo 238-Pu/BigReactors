@@ -21,7 +21,7 @@ public interface IHeatEntity {
 	// RF to transfer per tick per degree centigrade of difference on a single exposed face (1x1)
 	public static final float conductivityAir = 0.05f;
 	public static final float conductivityRubber = 0.01f;
-	public static final float conductivityWater = 0.1f;
+	public static final float conductivityWater = 2.0f; // Convection really speeds up heat conduction.
 	public static final float conductivityStone = 0.15f;
 	public static final float conductivityGlass = 0.3f;
 	public static final float conductivityIron = 0.6f; // Stainless steel, really.

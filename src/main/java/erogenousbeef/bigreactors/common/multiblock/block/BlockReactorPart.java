@@ -2,6 +2,26 @@ package erogenousbeef.bigreactors.common.multiblock.block;
 
 import java.util.List;
 
+import cpw.mods.fml.common.Optional;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import dan200.computercraft.api.peripheral.IPeripheral;
+import dan200.computercraft.api.peripheral.IPeripheralProvider;
+import erogenousbeef.bigreactors.common.BRLoader;
+import erogenousbeef.bigreactors.common.BigReactors;
+import erogenousbeef.bigreactors.common.multiblock.MultiblockReactor;
+import erogenousbeef.bigreactors.common.multiblock.interfaces.INeighborUpdatableEntity;
+import erogenousbeef.bigreactors.common.multiblock.tileentity.TileEntityReactorAccessPort;
+import erogenousbeef.bigreactors.common.multiblock.tileentity.TileEntityReactorComputerPort;
+import erogenousbeef.bigreactors.common.multiblock.tileentity.TileEntityReactorControlRod;
+import erogenousbeef.bigreactors.common.multiblock.tileentity.TileEntityReactorCoolantPort;
+import erogenousbeef.bigreactors.common.multiblock.tileentity.TileEntityReactorPart;
+import erogenousbeef.bigreactors.common.multiblock.tileentity.TileEntityReactorRedNetPort;
+import erogenousbeef.bigreactors.utils.StaticUtils;
+import erogenousbeef.core.common.CoordTriplet;
+import erogenousbeef.core.multiblock.IMultiblockPart;
+import erogenousbeef.core.multiblock.MultiblockControllerBase;
+import erogenousbeef.core.multiblock.rectangular.PartPosition;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -21,27 +41,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import powercrystals.minefactoryreloaded.api.rednet.IRedNetOmniNode;
 import powercrystals.minefactoryreloaded.api.rednet.connectivity.RedNetConnectionType;
-import cpw.mods.fml.common.Optional;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import dan200.computercraft.api.peripheral.IPeripheral;
-import dan200.computercraft.api.peripheral.IPeripheralProvider;
-import erogenousbeef.bigreactors.common.BRLoader;
-import erogenousbeef.bigreactors.common.BigReactors;
-import erogenousbeef.bigreactors.common.multiblock.MultiblockReactor;
-import erogenousbeef.bigreactors.common.multiblock.interfaces.INeighborUpdatableEntity;
-import erogenousbeef.bigreactors.common.multiblock.tileentity.TileEntityReactorAccessPort;
-import erogenousbeef.bigreactors.common.multiblock.tileentity.TileEntityReactorComputerPort;
-import erogenousbeef.bigreactors.common.multiblock.tileentity.TileEntityReactorControlRod;
-import erogenousbeef.bigreactors.common.multiblock.tileentity.TileEntityReactorCoolantPort;
-import erogenousbeef.bigreactors.common.multiblock.tileentity.TileEntityReactorPart;
-import erogenousbeef.bigreactors.common.multiblock.tileentity.TileEntityReactorPowerTap;
-import erogenousbeef.bigreactors.common.multiblock.tileentity.TileEntityReactorRedNetPort;
-import erogenousbeef.bigreactors.utils.StaticUtils;
-import erogenousbeef.core.common.CoordTriplet;
-import erogenousbeef.core.multiblock.IMultiblockPart;
-import erogenousbeef.core.multiblock.MultiblockControllerBase;
-import erogenousbeef.core.multiblock.rectangular.PartPosition;
 
 @Optional.InterfaceList({
 	@Optional.Interface(iface = "dan200.computercraft.api.peripheral.IPeripheralProvider", modid = "ComputerCraft"),
@@ -52,35 +51,46 @@ public class BlockReactorPart extends BlockContainer implements IRedNetOmniNode,
 	public static final int METADATA_CASING = 0;
 	public static final int METADATA_CONTROLLER = 1;
 	public static final int METADATA_CONTROLROD = 2;
-	public static final int METADATA_POWERTAP = 3;
-	public static final int METADATA_ACCESSPORT = 4;
-	public static final int METADATA_COOLANTPORT = 5;
-	public static final int METADATA_REDNETPORT = 6;
-	public static final int METADATA_COMPUTERPORT = 7;
+	//public static final int METADATA_POWERTAP = 3;
+	public static final int METADATA_ACCESSPORT = 3;
+	public static final int METADATA_COOLANTPORT = 4;
+	public static final int METADATA_REDNETPORT = 5;
+	public static final int METADATA_COMPUTERPORT = 6;
 	
 	private static final int PORT_INLET = 0;
 	private static final int PORT_OUTLET = 1;
-	private static final int TAP_DISCONNECTED = 0;
-	private static final int TAP_CONNECTED = 1;
+//	private static final int TAP_DISCONNECTED = 0;
+//	private static final int TAP_CONNECTED = 1;
 	private static final int CONTROLLER_OFF = 0;
 	private static final int CONTROLLER_IDLE = 1;
 	private static final int CONTROLLER_ACTIVE = 2;
 	
+	public static int renderId;
+	
 	private static String[] _subBlocks = new String[] { "casing",
+	"controller",
+	"controlRod",
+	"accessPort",
+	"coolantPort",
+	"redNetPort",
+	"computerPort" };
+
+	/*private static String[] _subBlocks = new String[] { "casing",
 														"controller",
 														"controlRod",
 														"powerTap",
 														"accessPort",
 														"coolantPort",
 														"redNetPort",
-														"computerPort" };
+														"computerPort" };*/
 	
-
+	
+	
 	private static String[][] _states = new String[][] {
 		{"default", "face", "corner", "eastwest", "northsouth", "vertical"}, // Casing
 		{"off", "idle", "active"}, 		// Controller
 		{"top"},						// Control Rod
-		{"disconnected", "connected"}, 	// Power Tap
+		//{"disconnected", "connected"}, 	// Power Tap
 		{"inlet", "outlet"}, 			// Access Port
 		{"inlet", "outlet"}, 			// Coolant Port
 		{"default"},					// RedNet Port
@@ -92,7 +102,7 @@ public class BlockReactorPart extends BlockContainer implements IRedNetOmniNode,
 	
 	public static boolean isCasing(int metadata) { return metadata == METADATA_CASING; }
 	public static boolean isController(int metadata) { return metadata == METADATA_CONTROLLER; }
-	public static boolean isPowerTap(int metadata) { return metadata == METADATA_POWERTAP; }
+	//public static boolean isPowerTap(int metadata) { return metadata == METADATA_POWERTAP; }
 	public static boolean isAccessPort(int metadata) { return metadata == METADATA_ACCESSPORT; }
 	public static boolean isRedNetPort(int metadata) { return metadata == METADATA_REDNETPORT; }
 	public static boolean isComputerPort(int metadata) { return metadata == METADATA_COMPUTERPORT; }
@@ -110,6 +120,16 @@ public class BlockReactorPart extends BlockContainer implements IRedNetOmniNode,
 	}
 
 	@Override
+	public int getRenderType() {
+		if(this.isControlRod(METADATA_CONTROLROD))
+		{
+			return renderId;
+		}
+		return super.getRenderType();
+		
+	}
+	
+	@Override
     public IIcon getIcon(IBlockAccess blockAccess, int x, int y, int z, int side) {
 		IIcon icon = null;
 		int metadata = blockAccess.getBlockMetadata(x,y,z);
@@ -125,9 +145,9 @@ public class BlockReactorPart extends BlockContainer implements IRedNetOmniNode,
 			case METADATA_CONTROLLER:
 				icon = getControllerIcon(blockAccess, x, y, z, side);
 				break;
-			case METADATA_POWERTAP:
-				icon = getPowerTapIcon(blockAccess, x, y, z, side);
-				break;
+			//case METADATA_POWERTAP:
+			//	icon = getPowerTapIcon(blockAccess, x, y, z, side);
+			//	break;
 			case METADATA_ACCESSPORT:
 				icon = getAccessPortIcon(blockAccess, x, y, z, side);
 				break;
@@ -197,8 +217,8 @@ public class BlockReactorPart extends BlockContainer implements IRedNetOmniNode,
 	@Override
 	public TileEntity createNewTileEntity(World world, int metadata) {
 		switch(metadata) {
-			case METADATA_POWERTAP:
-				return new TileEntityReactorPowerTap();
+			//case METADATA_POWERTAP:
+			//	return new TileEntityReactorPowerTap();
 			case METADATA_ACCESSPORT:
 				return new TileEntityReactorAccessPort();
 			case METADATA_REDNETPORT:
@@ -251,7 +271,7 @@ public class BlockReactorPart extends BlockContainer implements IRedNetOmniNode,
 			controller = part.getMultiblockController();
 		}
 		
-		if(isCasing(metadata) || isPowerTap(metadata) || isComputerPort(metadata)) {
+		if(isCasing(metadata) /*|| isPowerTap(metadata)*/ || isComputerPort(metadata)) {
 			// If the player's hands are empty and they rightclick on a multiblock, they get a 
 			// multiblock-debugging message if the machine is not assembled.
 			if(player.getCurrentEquippedItem() == null) {
@@ -326,9 +346,9 @@ public class BlockReactorPart extends BlockContainer implements IRedNetOmniNode,
 		return new ItemStack(this, 1, METADATA_CONTROLLER);
 	}
 	
-	public ItemStack getReactorPowerTapItemStack() {
-		return new ItemStack(this, 1, METADATA_POWERTAP);
-	}
+	//public ItemStack getReactorPowerTapItemStack() {
+	//	return new ItemStack(this, 1, METADATA_POWERTAP);
+	//}
 	
 	public ItemStack getAccessPortItemStack() {
 		return new ItemStack(this, 1, METADATA_ACCESSPORT);
@@ -499,6 +519,10 @@ inv:		for(int i = 0; i < inventory.getSizeInventory(); i++)
 					return _icons[METADATA_COOLANTPORT][PORT_OUTLET];
 				}
 			}
+			if(isReactorAssembled(port) && !isOutwardsSide(port, side))
+			{
+				return _icons[METADATA_CASING][FACE];
+			}
 		}
 		return blockIcon;
 	}
@@ -517,11 +541,15 @@ inv:		for(int i = 0; i < inventory.getSizeInventory(); i++)
 					return _icons[METADATA_ACCESSPORT][PORT_OUTLET];
 				}
 			}
+			if(isReactorAssembled(port) && !isOutwardsSide(port, side))
+			{
+				return _icons[METADATA_CASING][FACE];
+			}
 		}
 		return blockIcon;
 	}
 
-	private IIcon getPowerTapIcon(IBlockAccess blockAccess, int x, int y, int z, int side) {
+	/*private IIcon getPowerTapIcon(IBlockAccess blockAccess, int x, int y, int z, int side) {
 		TileEntity te = blockAccess.getTileEntity(x, y, z);
 		if(te instanceof TileEntityReactorPowerTap) {
 			TileEntityReactorPowerTap tap = (TileEntityReactorPowerTap)te;
@@ -536,7 +564,7 @@ inv:		for(int i = 0; i < inventory.getSizeInventory(); i++)
 			}
 		}
 		return blockIcon;
-	}
+	}*/
 
 	private IIcon getControllerIcon(IBlockAccess blockAccess, int x, int y,
 			int z, int side) {
@@ -549,7 +577,7 @@ inv:		for(int i = 0; i < inventory.getSizeInventory(); i++)
 				return _icons[METADATA_CONTROLLER][CONTROLLER_OFF];
 			}
 			else if(!isOutwardsSide(controller, side)) {
-				return blockIcon;
+				return _icons[METADATA_CASING][FACE];
 			}
 			else if(reactor.getActive()) {
 				return _icons[METADATA_CONTROLLER][CONTROLLER_ACTIVE];
@@ -639,8 +667,13 @@ inv:		for(int i = 0; i < inventory.getSizeInventory(); i++)
 			if(!isReactorAssembled(part) || isOutwardsSide(part, side)) {
 				return _icons[metadata][0];
 			}
+			if(isReactorAssembled(part) && !isOutwardsSide(part, side))
+			{
+				return _icons[METADATA_CASING][FACE];
+			}
 		}
-		return this.blockIcon;
+		return _icons[metadata][0];
+		//return this.blockIcon;
 	}
 	
 	/**

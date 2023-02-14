@@ -280,7 +280,7 @@ public abstract class TileEntityPoweredInventoryFluid extends
     		return true;
     	}
     	else {
-    		return tank.getFluid().fluidID == fluid.getID();
+    		return tank.getFluid().getFluidID() == fluid.getID();
     	}
     }
 
@@ -302,7 +302,7 @@ public abstract class TileEntityPoweredInventoryFluid extends
     		return false;
     	}
     	else {
-    		return tank.getFluid().fluidID == fluid.getID();
+    		return tank.getFluid().getFluidID() == fluid.getID();
     	}
     }
 

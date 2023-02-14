@@ -50,7 +50,7 @@ public class TileEntityReactorComputerPort extends TileEntityReactorPart impleme
 		getMinimumCoordinate,	// No arguments
 		getMaximumCoordinate,	// No arguments
 		getControlRodLocation,	// Required Arg: integer (index)
-		isActivelyCooled,		// No arguments
+		//isActivelyCooled,		// No arguments
 		setActive,				// Required Arg: integer (active)
 		setControlRodLevel,		// Required Args: fuel rod index, integer (insertion)
 		setAllControlRodLevels,	// Required Arg: integer (insertion)
@@ -133,13 +133,13 @@ public class TileEntityReactorComputerPort extends TileEntityReactorPart impleme
 			return new Object[] { reactor.getEnergyGeneratedLastTick() };
 		
 		case getHotFluidProducedLastTick:
-			if(reactor.isPassivelyCooled())
-				return new Object[] { 0f };
-			else
+			//if(reactor.isPassivelyCooled())
+			//	return new Object[] { 0f };
+			//else
 				return new Object[] { reactor.getEnergyGeneratedLastTick() };
 			
-		case isActivelyCooled:
-			return new Object[] { !reactor.isPassivelyCooled() };
+		//case isActivelyCooled:
+		//	return new Object[] { !reactor.isPassivelyCooled() };
 
 		case getCoolantAmount:
 			return new Object[] { reactor.getCoolantContainer().getCoolantAmount() };

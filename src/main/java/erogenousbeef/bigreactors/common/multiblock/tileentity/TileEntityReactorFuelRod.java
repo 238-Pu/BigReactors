@@ -1,12 +1,9 @@
 package erogenousbeef.bigreactors.common.multiblock.tileentity;
 
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.IFluidBlock;
+import com.hbm.blocks.ModBlocks;
+import com.hbm.handler.radiation.ChunkRadiationManager;
+//import com.hbm.saveddata.RadiationSavedData;
+
 import cofh.lib.util.helpers.ItemHelper;
 import erogenousbeef.bigreactors.api.IHeatEntity;
 import erogenousbeef.bigreactors.api.IRadiationModerator;
@@ -19,6 +16,13 @@ import erogenousbeef.bigreactors.common.multiblock.helpers.RadiationHelper;
 import erogenousbeef.bigreactors.utils.StaticUtils;
 import erogenousbeef.core.multiblock.MultiblockValidationException;
 import erogenousbeef.core.multiblock.rectangular.RectangularMultiblockTileEntityBase;
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.IFluidBlock;
 
 public class TileEntityReactorFuelRod extends TileEntityReactorPartBase implements IRadiationModerator, IHeatEntity {
 
@@ -176,6 +180,47 @@ public class TileEntityReactorFuelRod extends TileEntityReactorPartBase implemen
 		}
 
 		return heatTransferRate;
+	}
+	
+	public void meltdown()
+	{
+		MultiblockReactor reactor = getReactorController();
+		//TileEntity entityBelow = this.worldObj.getTileEntity(xCoord, yCoord - 1, zCoord);
+		//TileEntity entityAbove = this.worldObj.getTileEntity(xCoord, yCoord + 1, zCoord);
+		int minX = reactor.getMinimumCoord().x;
+		int maxX = reactor.getMaximumCoord().x;
+		int minY = reactor.getMinimumCoord().y;
+		int maxY = reactor.getMaximumCoord().y;
+		int minZ = reactor.getMinimumCoord().z;
+		int maxZ = reactor.getMaximumCoord().z;
+		
+		for (int x2=minX; x2 < maxX; x2++)
+		{
+			for (int z2=minZ; z2 < maxZ; z2++)
+			{
+				for (int y2=minY+2; y2 < maxY; y2++)
+				{
+					TileEntity te = this.worldObj.getTileEntity(x2, y2, z2);
+					if(te instanceof TileEntityReactorFuelRod) {
+						worldObj.setBlock(x2, y2, z2, ModBlocks.corium_block, 0, 3);
+					}
+					TileEntity te2 = this.worldObj.getTileEntity(x2, maxY, z2);
+					if(te2 instanceof TileEntityReactorControlRod) {
+						ChunkRadiationManager.proxy.incrementRad(this.worldObj, xCoord, yCoord, zCoord, 5000);
+						worldObj.createExplosion(null, x2, maxY+2, z2, 5F, true);
+					}
+					/*TileEntity te3 = this.worldObj.getTileEntity(x2, y2, z2);
+					if(te3 instanceof TileEntityReactorFuelRod) {
+						worldObj.setBlock(x2, y2, z2, ModBlocks.toxic_block, 0, 3);
+					}*/
+				}
+			}
+		}
+		
+//		worldObj.createExplosion(null, xCoord, maxY+2, zCoord, 5F, true);
+//		worldObj.setBlock(xCoord, minY+1, zCoord, BigReactors.fluidCoriumStill, 0, 3);
+		//worldObj.setBlock(xCoord, minY+1, zCoord, BigReactors.fluidCoriumStill, 0, 3);
+		//reactor.attachedFuelRods.remove(this);
 	}
 	
 	private float getConductivityFromBlock(Block block, int metadata) {
